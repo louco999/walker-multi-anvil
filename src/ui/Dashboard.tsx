@@ -263,10 +263,10 @@ export function Dashboard() {
           ) : viewMode === 'cell' ? (
             <>
               <div>
-                <i style={{ background: '#ff6a1a' }} /> 加热堆栈中段（热）
+                <i style={{ background: '#ffee66' }} /> 加热堆栈中段（白热）
               </div>
               <div>
-                <i style={{ background: '#5c3020' }} /> 加热堆栈两端（较冷）
+                <i style={{ background: '#3040a0' }} /> 加热堆栈两端（冷·蓝）
               </div>
               <div>
                 <i style={{ background: '#8B4A3A' }} /> MgO（外壳，不加热着色）

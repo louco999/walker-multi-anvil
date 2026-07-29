@@ -18,8 +18,8 @@ function publicUrl(path: string): string {
  * furnace tube, spacers, capsule, sample, TC, electrodes.
  * Outer MgO / ZrO₂ sleeve stay cold (static materials).
  *
- * Axial gradient along furnace +Z: mid-plane hottest, both ends cooler.
- * Shared half-length so a tiny sample at z≈0 is fully hot, end spacers cooler.
+ * False-color axial gradient (furnace +Z): mid-plane white-hot, both ends blue-cold.
+ * Material.color must be white when vertexColors is on (otherwise dark albedo kills map).
  */
 const HEATER_STACK_GROUPS = new Set([
   'cell_furnace',
@@ -29,11 +29,30 @@ const HEATER_STACK_GROUPS = new Set([
   'cell_electrode',
 ]);
 
-/** Typical 14/8 furnace half-height (mm) for consistent axial map across small parts. */
-const HEATER_STACK_HALF_Z = 4.2;
+/** Half-length of heater stack along Z (mm). Matches 14/8 furnace ~5.2 mm tall. */
+const HEATER_STACK_HALF_Z = 2.7;
 
 function isHeaterStackPart(meta: CadPartMeta): boolean {
   return HEATER_STACK_GROUPS.has(meta.group);
+}
+
+/** Classic thermal false-color: cold navy → cyan → yellow → white-hot. */
+function heatFalseColor(heat01: number, out: THREE.Color): THREE.Color {
+  const h = Math.min(1, Math.max(0, heat01));
+  if (h < 0.25) {
+    const u = h / 0.25;
+    return out.setRGB(0.05 + u * 0.05, 0.08 + u * 0.35, 0.35 + u * 0.45);
+  }
+  if (h < 0.5) {
+    const u = (h - 0.25) / 0.25;
+    return out.setRGB(0.1 + u * 0.7, 0.43 + u * 0.45, 0.8 - u * 0.55);
+  }
+  if (h < 0.75) {
+    const u = (h - 0.5) / 0.25;
+    return out.setRGB(0.8 + u * 0.2, 0.88 - u * 0.15, 0.25 - u * 0.2);
+  }
+  const u = (h - 0.75) / 0.25;
+  return out.setRGB(1.0, 0.73 + u * 0.27, 0.05 + u * 0.75);
 }
 
 function applyHeaterStackGradientColors(
@@ -49,28 +68,38 @@ function applyHeaterStackGradientColors(
     geo.setAttribute('color', colors);
   }
 
+  // Use this mesh's Z span if it is long (furnace); else global heater half-length
+  let zMin = Infinity;
+  let zMax = -Infinity;
+  for (let i = 0; i < pos.count; i++) {
+    const z = pos.getZ(i);
+    if (z < zMin) zMin = z;
+    if (z > zMax) zMax = z;
+  }
+  const span = zMax - zMin;
+  // gradient reference: prefer full stack scale so mid vs ends read clearly
+  const half =
+    span > 1.5
+      ? Math.max(Math.abs(zMin), Math.abs(zMax), span * 0.5) * 0.98
+      : HEATER_STACK_HALF_Z;
+
   const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-  // cold material → mid hot (yellow-orange) → ends still warm but darker
-  const cold = baseColor.clone().lerp(new THREE.Color('#1c1a18'), 0.4);
-  const hotCore = new THREE.Color('#ff4a12').lerp(new THREE.Color('#ffee66'), 0.45 * tNorm);
-  const hotSide = new THREE.Color('#3a2018').lerp(new THREE.Color('#d04518'), 0.75 * tNorm);
+  // Boost visibility: heat map kicks in early and stays strong
+  const heatAmp = Math.min(1, tNorm * 1.35);
   const c = new THREE.Color();
-  const half = HEATER_STACK_HALF_Z;
 
   for (let i = 0; i < pos.count; i++) {
     const z = pos.getZ(i);
-    // 0 at mid-plane, 1 at |z|≈half (ends of heater stack)
-    const u = Math.min(1, Math.abs(z) / half);
-    // middle hot, both sides cooler
-    const midWeight = Math.exp(-u * u * 3.4);
-    if (tNorm < 0.035) {
+    // 0 at mid-plane, 1 at ends
+    const u = Math.min(1, Math.abs(z) / Math.max(half, 1e-3));
+    // middle = 1 (hot), ends = 0 (cold) — strong parabolic falloff
+    const midHot = Math.pow(1 - u, 1.65);
+    if (heatAmp < 0.03) {
       c.copy(baseColor);
     } else {
-      c.copy(hotSide).lerp(hotCore, midWeight);
-      // fade from room-temp material toward heat colors
-      c.lerp(cold, Math.pow(1 - tNorm, 1.2));
-      // keep a whisper of base hue so sample/capsule stay readable
-      c.lerp(baseColor, 0.12 * (1 - tNorm));
+      // local heat 0..1: ends stay cooler even at high T
+      const local = heatAmp * (0.12 + 0.88 * midHot);
+      heatFalseColor(local, c);
     }
     colors.setXYZ(i, c.r, c.g, c.b);
   }
@@ -268,9 +297,15 @@ function PartMesh({
   const mat = useMemo(() => {
     const m = materialForCadPart(meta, transparentShell);
     if (isHeaterStack) {
+      // CRITICAL: vertexColors multiply material.color — must be white or map is invisible
+      m.color.set(0xffffff);
       m.vertexColors = true;
-      m.metalness = Math.min(m.metalness, 0.2);
-      m.roughness = Math.max(m.roughness, 0.5);
+      m.metalness = 0.02;
+      m.roughness = 0.62;
+      m.emissive.set(0x000000);
+      m.emissiveIntensity = 0;
+      // skip ACES crush so false-color heat stays vivid
+      m.toneMapped = false;
     }
     return m;
   }, [meta.color, meta.group, meta.id, transparentShell, isHeaterStack]);
@@ -288,21 +323,19 @@ function PartMesh({
     mat.needsUpdate = true;
   }, [mat, cutaway, clipPlane]);
 
-  // Heater stack: axial T map — mid hot, both ends cooler
+  // Heater stack: strong false-color axial map (mid white-hot, ends blue-cold)
   useEffect(() => {
     if (!isHeaterStack) return;
     const [r, g0, b] = meta.color;
     applyHeaterStackGradientColors(geometry, temperatureC, new THREE.Color(r, g0, b));
     const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-    // sample at mid-plane glows most; end spacers/electrodes less
-    const isCore =
-      meta.group === 'cell_sample' ||
-      meta.group === 'cell_furnace' ||
-      meta.id.includes('Sample');
-    mat.emissive.setRGB(1.0, 0.32 + 0.28 * tNorm, 0.04);
-    mat.emissiveIntensity = tNorm * (isCore ? 1.25 : 0.55);
+    mat.color.set(0xffffff);
+    mat.vertexColors = true;
+    // mild global glow so heat still reads under dark studio lighting
+    mat.emissive.setRGB(0.55, 0.22, 0.04);
+    mat.emissiveIntensity = tNorm * 0.65;
     mat.needsUpdate = true;
-  }, [isHeaterStack, geometry, temperatureC, meta.color, meta.group, meta.id, mat]);
+  }, [isHeaterStack, geometry, temperatureC, meta.color, mat]);
 
   // Press top gauges: left follows pressure, right follows temperature
   useFrame((_, dt) => {
