@@ -199,7 +199,7 @@ export function Dashboard() {
           {viewMode === 'full'
             ? 'Voggenreiter 风格四柱压机 + Walker 工具模块 + 14/8 cell（教学尺度）。'
             : viewMode === 'cell'
-              ? 'Kawai 14/8 腔体：面开孔、角槽热电偶、填满炉孔；升温时中心热色更亮。'
+              ? 'Kawai 14/8 腔体：面开孔、角槽热电偶；升温仅加热体中间热、两端冷。'
               : '仅 Walker 模块：端面环 → hatbox → 6 砧 → 8 WC → cell。'}
         </p>
         <ExplosionSlider />
@@ -263,16 +263,16 @@ export function Dashboard() {
           ) : viewMode === 'cell' ? (
             <>
               <div>
-                <i style={{ background: '#ff5522' }} /> 中心热区（升温）
+                <i style={{ background: '#ff6a1a' }} /> 加热体中段（热）
+              </div>
+              <div>
+                <i style={{ background: '#5c3020' }} /> 加热体两端（较冷）
               </div>
               <div>
                 <i style={{ background: '#8B4A3A' }} /> MgO 八面体
               </div>
               <div>
                 <i style={{ background: '#e8e4dc' }} /> ZrO₂ 绝缘
-              </div>
-              <div>
-                <i style={{ background: '#383430' }} /> LaCrO₃ 阶梯炉
               </div>
               <div>
                 <i style={{ background: '#d9a61f' }} /> 热电偶
@@ -296,7 +296,7 @@ export function Dashboard() {
           {viewMode === 'full'
             ? 'Start 实验时顶梁双表随 P–T 转动 · 爆炸看压机→模块→cell'
             : viewMode === 'cell'
-              ? '升温：中心最热、外侧较冷 · 爆炸拆层'
+              ? '升温：仅炉管加热体 · 中间热两端冷 · 爆炸拆层'
               : '模块核心 · 半剖看 WC 与 cell'}
         </p>
       </aside>

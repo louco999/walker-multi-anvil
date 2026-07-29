@@ -4,7 +4,6 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import * as THREE from 'three';
 import { layerExplosion, useWalkerStore } from '../store/useWalkerStore';
-import { thermalColor } from '../geometry/materials';
 import type { CadManifest, CadPartMeta } from '../cad/types';
 
 /** Public asset URL with Vite base (works on GitHub Pages /repo-name/). */
@@ -14,26 +13,14 @@ function publicUrl(path: string): string {
   return `${base}${clean}`;
 }
 
-/** How strongly this cell part glows when the run heats up (core hottest). */
-function cellHeatRole(meta: CadPartMeta): number {
-  const { group, id } = meta;
-  if (group === 'cell_sample' && id.includes('Sample')) return 1.0;
-  if (group === 'cell_sample') return 0.72;
-  if (group === 'cell_furnace') return 0.9;
-  if (group === 'cell_spacer') return 0.42;
-  if (group === 'cell_electrode') return 0.38;
-  if (group === 'cell_insulator') return 0.32;
-  if (group === 'cell_tc') return 0.55;
-  if (group === 'cell_mgo') return 0.28;
-  return 0.2;
-}
-
-/** Paint vertex colors: center of cell hot, outer cooler (radial + mild axial). */
-function applyCellHeatVertexColors(
+/**
+ * Heat map ONLY on the furnace heater body (加热体).
+ * Axial gradient: mid-length hottest, both ends cooler ("中间最热、两边冷").
+ * Other cell parts keep their static material colors.
+ */
+function applyHeaterGradientColors(
   geo: THREE.BufferGeometry,
-  role: number,
   temperatureC: number,
-  pressureGPa: number,
   baseColor: THREE.Color,
 ) {
   const pos = geo.getAttribute('position');
@@ -43,28 +30,36 @@ function applyCellHeatVertexColors(
     colors = new THREE.BufferAttribute(new Float32Array(pos.count * 3), 3);
     geo.setAttribute('color', colors);
   }
-  geo.computeBoundingSphere();
-  const r0 = Math.max(geo.boundingSphere?.radius ?? 5, 1e-3);
-  const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-  const pNorm = Math.min(1, pressureGPa / 23);
-  const heatRun = Math.max(tNorm, pNorm * 0.45);
-  const hot = thermalColor(pressureGPa, temperatureC, new THREE.Color());
-  const cool = baseColor.clone().lerp(new THREE.Color('#2a3040'), 0.25);
-  const c = new THREE.Color();
+
+  // Find axial extent (furnace axis = +Z in FreeCAD cell frame)
+  let zMin = Infinity;
+  let zMax = -Infinity;
   for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const y = pos.getY(i);
     const z = pos.getZ(i);
-    // furnace axis = +Z in FreeCAD cell; radial = distance from axis
-    const radial = Math.hypot(x, y) / r0;
-    const axial = Math.abs(z) / r0;
-    // center hot (low radial), sides cooler; mild end-cool
-    const core = Math.exp(-radial * radial * 3.2) * Math.exp(-axial * axial * 0.55);
-    const w = role * (0.22 + 0.78 * core);
-    const h = heatRun * w;
-    c.copy(cool).lerp(hot, Math.min(1, h * 1.15));
-    // keep a bit of material identity when cold
-    if (heatRun < 0.08) c.lerp(baseColor, 0.85);
+    if (z < zMin) zMin = z;
+    if (z > zMax) zMax = z;
+  }
+  const zMid = 0.5 * (zMin + zMax);
+  const halfLen = Math.max(0.5 * (zMax - zMin), 1e-3);
+
+  const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
+  // cold: dark ceramic; hot core: orange-yellow; ends: dull red/brown
+  const cold = baseColor.clone().lerp(new THREE.Color('#1a1816'), 0.35);
+  const hotCore = new THREE.Color('#ff6a1a').lerp(new THREE.Color('#ffe066'), tNorm * 0.55);
+  const hotEnd = new THREE.Color('#5c3020').lerp(new THREE.Color('#c44a22'), tNorm * 0.7);
+  const c = new THREE.Color();
+
+  for (let i = 0; i < pos.count; i++) {
+    const z = pos.getZ(i);
+    // 1 at mid-plane, ~0 at both ends
+    const u = Math.abs(z - zMid) / halfLen; // 0 center → 1 ends
+    const midWeight = Math.exp(-u * u * 2.8); // sharp central hot zone
+    if (tNorm < 0.04) {
+      c.copy(baseColor);
+    } else {
+      c.copy(hotEnd).lerp(hotCore, midWeight);
+      c.lerp(cold, 1 - tNorm);
+    }
     colors.setXYZ(i, c.r, c.g, c.b);
   }
   colors.needsUpdate = true;
@@ -229,9 +224,10 @@ function PartMesh({
   const simProgress = useWalkerStore((s) => s.simProgress);
 
   const isCell = meta.group.startsWith('cell_');
+  // Only the LaCrO₃ / graphite heater tube shows temperature gradient
+  const isHeater = meta.group === 'cell_furnace';
   // Dial face + hub spin (not the whole gauge body housing)
   const isGaugeSpin = meta.id.includes('GaugeDial') || meta.id.includes('GaugeHub');
-  const heatRole = isCell ? cellHeatRole(meta) : 0;
 
   const geometry = useMemo(() => {
     let g: THREE.BufferGeometry = rawGeo;
@@ -242,12 +238,12 @@ function PartMesh({
     }
     g.computeVertexNormals();
     g.computeBoundingSphere();
-    if (isCell) {
+    if (isHeater) {
       const [r, g0, b] = meta.color;
-      applyCellHeatVertexColors(g, heatRole, 25, 0, new THREE.Color(r, g0, b));
+      applyHeaterGradientColors(g, 25, new THREE.Color(r, g0, b));
     }
     return g;
-  }, [rawGeo, isCell, heatRole, meta.color]);
+  }, [rawGeo, isHeater, meta.color]);
 
   const gaugeCenter = useMemo(() => {
     if (!isGaugeSpin) return null;
@@ -259,13 +255,13 @@ function PartMesh({
 
   const mat = useMemo(() => {
     const m = materialForCadPart(meta, transparentShell);
-    if (isCell) {
+    if (isHeater) {
       m.vertexColors = true;
-      m.metalness = Math.min(m.metalness, 0.25);
-      m.roughness = Math.max(m.roughness, 0.45);
+      m.metalness = 0.08;
+      m.roughness = 0.72;
     }
     return m;
-  }, [meta.color, meta.group, meta.id, transparentShell, isCell]);
+  }, [meta.color, meta.group, meta.id, transparentShell, isHeater]);
 
   const clipPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.015), []);
 
@@ -280,22 +276,16 @@ function PartMesh({
     mat.needsUpdate = true;
   }, [mat, cutaway, clipPlane]);
 
-  // Cell heat: center hot, sides cooler
+  // Heater only: axial T gradient (mid hot, both ends cooler)
   useEffect(() => {
-    if (!isCell) return;
+    if (!isHeater) return;
     const [r, g0, b] = meta.color;
-    applyCellHeatVertexColors(
-      geometry,
-      heatRole,
-      temperatureC,
-      pressureGPa,
-      new THREE.Color(r, g0, b),
-    );
+    applyHeaterGradientColors(geometry, temperatureC, new THREE.Color(r, g0, b));
     const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-    mat.emissive.copy(thermalColor(pressureGPa, temperatureC));
-    mat.emissiveIntensity = heatRole * tNorm * 0.85;
+    mat.emissive.setRGB(1.0, 0.35 + 0.25 * tNorm, 0.05);
+    mat.emissiveIntensity = tNorm * 1.15;
     mat.needsUpdate = true;
-  }, [isCell, geometry, heatRole, temperatureC, pressureGPa, meta.color, mat]);
+  }, [isHeater, geometry, temperatureC, meta.color, mat]);
 
   // Press top gauges: left follows pressure, right follows temperature
   useFrame((_, dt) => {
