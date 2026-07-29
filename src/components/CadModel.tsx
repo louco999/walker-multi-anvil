@@ -14,11 +14,29 @@ function publicUrl(path: string): string {
 }
 
 /**
- * Heat map ONLY on the furnace heater body (加热体).
- * Axial gradient: mid-length hottest, both ends cooler ("中间最热、两边冷").
- * Other cell parts keep their static material colors.
+ * Everything *inside* the heater stack gets a heat map:
+ * furnace tube, spacers, capsule, sample, TC, electrodes.
+ * Outer MgO / ZrO₂ sleeve stay cold (static materials).
+ *
+ * Axial gradient along furnace +Z: mid-plane hottest, both ends cooler.
+ * Shared half-length so a tiny sample at z≈0 is fully hot, end spacers cooler.
  */
-function applyHeaterGradientColors(
+const HEATER_STACK_GROUPS = new Set([
+  'cell_furnace',
+  'cell_sample',
+  'cell_spacer',
+  'cell_tc',
+  'cell_electrode',
+]);
+
+/** Typical 14/8 furnace half-height (mm) for consistent axial map across small parts. */
+const HEATER_STACK_HALF_Z = 4.2;
+
+function isHeaterStackPart(meta: CadPartMeta): boolean {
+  return HEATER_STACK_GROUPS.has(meta.group);
+}
+
+function applyHeaterStackGradientColors(
   geo: THREE.BufferGeometry,
   temperatureC: number,
   baseColor: THREE.Color,
@@ -31,34 +49,28 @@ function applyHeaterGradientColors(
     geo.setAttribute('color', colors);
   }
 
-  // Find axial extent (furnace axis = +Z in FreeCAD cell frame)
-  let zMin = Infinity;
-  let zMax = -Infinity;
-  for (let i = 0; i < pos.count; i++) {
-    const z = pos.getZ(i);
-    if (z < zMin) zMin = z;
-    if (z > zMax) zMax = z;
-  }
-  const zMid = 0.5 * (zMin + zMax);
-  const halfLen = Math.max(0.5 * (zMax - zMin), 1e-3);
-
   const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-  // cold: dark ceramic; hot core: orange-yellow; ends: dull red/brown
-  const cold = baseColor.clone().lerp(new THREE.Color('#1a1816'), 0.35);
-  const hotCore = new THREE.Color('#ff6a1a').lerp(new THREE.Color('#ffe066'), tNorm * 0.55);
-  const hotEnd = new THREE.Color('#5c3020').lerp(new THREE.Color('#c44a22'), tNorm * 0.7);
+  // cold material → mid hot (yellow-orange) → ends still warm but darker
+  const cold = baseColor.clone().lerp(new THREE.Color('#1c1a18'), 0.4);
+  const hotCore = new THREE.Color('#ff4a12').lerp(new THREE.Color('#ffee66'), 0.45 * tNorm);
+  const hotSide = new THREE.Color('#3a2018').lerp(new THREE.Color('#d04518'), 0.75 * tNorm);
   const c = new THREE.Color();
+  const half = HEATER_STACK_HALF_Z;
 
   for (let i = 0; i < pos.count; i++) {
     const z = pos.getZ(i);
-    // 1 at mid-plane, ~0 at both ends
-    const u = Math.abs(z - zMid) / halfLen; // 0 center → 1 ends
-    const midWeight = Math.exp(-u * u * 2.8); // sharp central hot zone
-    if (tNorm < 0.04) {
+    // 0 at mid-plane, 1 at |z|≈half (ends of heater stack)
+    const u = Math.min(1, Math.abs(z) / half);
+    // middle hot, both sides cooler
+    const midWeight = Math.exp(-u * u * 3.4);
+    if (tNorm < 0.035) {
       c.copy(baseColor);
     } else {
-      c.copy(hotEnd).lerp(hotCore, midWeight);
-      c.lerp(cold, 1 - tNorm);
+      c.copy(hotSide).lerp(hotCore, midWeight);
+      // fade from room-temp material toward heat colors
+      c.lerp(cold, Math.pow(1 - tNorm, 1.2));
+      // keep a whisper of base hue so sample/capsule stay readable
+      c.lerp(baseColor, 0.12 * (1 - tNorm));
     }
     colors.setXYZ(i, c.r, c.g, c.b);
   }
@@ -224,8 +236,8 @@ function PartMesh({
   const simProgress = useWalkerStore((s) => s.simProgress);
 
   const isCell = meta.group.startsWith('cell_');
-  // Only the LaCrO₃ / graphite heater tube shows temperature gradient
-  const isHeater = meta.group === 'cell_furnace';
+  // Everything packed inside the heater (not outer MgO / ZrO₂ shell)
+  const isHeaterStack = isHeaterStackPart(meta);
   // Dial face + hub spin (not the whole gauge body housing)
   const isGaugeSpin = meta.id.includes('GaugeDial') || meta.id.includes('GaugeHub');
 
@@ -238,12 +250,12 @@ function PartMesh({
     }
     g.computeVertexNormals();
     g.computeBoundingSphere();
-    if (isHeater) {
+    if (isHeaterStack) {
       const [r, g0, b] = meta.color;
-      applyHeaterGradientColors(g, 25, new THREE.Color(r, g0, b));
+      applyHeaterStackGradientColors(g, 25, new THREE.Color(r, g0, b));
     }
     return g;
-  }, [rawGeo, isHeater, meta.color]);
+  }, [rawGeo, isHeaterStack, meta.color]);
 
   const gaugeCenter = useMemo(() => {
     if (!isGaugeSpin) return null;
@@ -255,13 +267,13 @@ function PartMesh({
 
   const mat = useMemo(() => {
     const m = materialForCadPart(meta, transparentShell);
-    if (isHeater) {
+    if (isHeaterStack) {
       m.vertexColors = true;
-      m.metalness = 0.08;
-      m.roughness = 0.72;
+      m.metalness = Math.min(m.metalness, 0.2);
+      m.roughness = Math.max(m.roughness, 0.5);
     }
     return m;
-  }, [meta.color, meta.group, meta.id, transparentShell, isHeater]);
+  }, [meta.color, meta.group, meta.id, transparentShell, isHeaterStack]);
 
   const clipPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.015), []);
 
@@ -276,16 +288,21 @@ function PartMesh({
     mat.needsUpdate = true;
   }, [mat, cutaway, clipPlane]);
 
-  // Heater only: axial T gradient (mid hot, both ends cooler)
+  // Heater stack: axial T map — mid hot, both ends cooler
   useEffect(() => {
-    if (!isHeater) return;
+    if (!isHeaterStack) return;
     const [r, g0, b] = meta.color;
-    applyHeaterGradientColors(geometry, temperatureC, new THREE.Color(r, g0, b));
+    applyHeaterStackGradientColors(geometry, temperatureC, new THREE.Color(r, g0, b));
     const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
-    mat.emissive.setRGB(1.0, 0.35 + 0.25 * tNorm, 0.05);
-    mat.emissiveIntensity = tNorm * 1.15;
+    // sample at mid-plane glows most; end spacers/electrodes less
+    const isCore =
+      meta.group === 'cell_sample' ||
+      meta.group === 'cell_furnace' ||
+      meta.id.includes('Sample');
+    mat.emissive.setRGB(1.0, 0.32 + 0.28 * tNorm, 0.04);
+    mat.emissiveIntensity = tNorm * (isCore ? 1.25 : 0.55);
     mat.needsUpdate = true;
-  }, [isHeater, geometry, temperatureC, meta.color, mat]);
+  }, [isHeaterStack, geometry, temperatureC, meta.color, meta.group, meta.id, mat]);
 
   // Press top gauges: left follows pressure, right follows temperature
   useFrame((_, dt) => {
