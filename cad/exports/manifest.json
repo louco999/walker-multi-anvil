@@ -1,0 +1,559 @@
+{
+  "units": "mm",
+  "scale_to_scene": 0.012,
+  "press_axis": [
+    0,
+    0,
+    1
+  ],
+  "cell": "14/8 detailed (MgO+ZrO2+LaCrO3 stepped+capsule+TC)",
+  "parameters": {
+    "wc_edge": 26.0,
+    "tel": 8.0,
+    "octa_edge": 14.0,
+    "first_stage_radial_depth": 20.0,
+    "hatbox_clearance": 1.2,
+    "hatbox_wall": 16.0,
+    "hatbox_height": 100.0,
+    "flange_extra": 10.0,
+    "flange_thick": 9.0,
+    "end_ring_thick": 14.0,
+    "end_ring_inner_scale": 0.55,
+    "first_stage_kerf": 0.25,
+    "furnace_bore_r": 3.5,
+    "octa_clearance": 0.08,
+    "doc_name": "WalkerTypeModule_14_8",
+    "a": 26.0,
+    "d_cut": 5.65685424949238,
+    "octa_mid_r": 9.107535341682732,
+    "r_pkg_xy": 42.45782220824175,
+    "r_inner": 63.657822208241754,
+    "r_outer": 79.65782220824175,
+    "hatbox_h": 100.0
+  },
+  "parts": [
+    {
+      "id": "WC_mmm",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "stl": "parts_stl/WC_mmm.stl",
+      "step": "parts/WC_mmm.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.83011066938
+    },
+    {
+      "id": "WC_mmp",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        -0.6666666666666666,
+        -0.6666666666666666,
+        -0.3333333333333333
+      ],
+      "stl": "parts_stl/WC_mmp.stl",
+      "step": "parts/WC_mmp.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669373
+    },
+    {
+      "id": "WC_mpm",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        -0.24401693585629247,
+        0.9106836025229591,
+        -0.33333333333333337
+      ],
+      "stl": "parts_stl/WC_mpm.stl",
+      "step": "parts/WC_mpm.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669376
+    },
+    {
+      "id": "WC_mpp",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        -0.9106836025229591,
+        0.24401693585629247,
+        0.3333333333333333
+      ],
+      "stl": "parts_stl/WC_mpp.stl",
+      "step": "parts/WC_mpp.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669373
+    },
+    {
+      "id": "WC_pmm",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        0.9106836025229591,
+        -0.24401693585629247,
+        -0.3333333333333333
+      ],
+      "stl": "parts_stl/WC_pmm.stl",
+      "step": "parts/WC_pmm.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669376
+    },
+    {
+      "id": "WC_pmp",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        0.24401693585629247,
+        -0.9106836025229591,
+        0.33333333333333337
+      ],
+      "stl": "parts_stl/WC_pmp.stl",
+      "step": "parts/WC_pmp.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669373
+    },
+    {
+      "id": "WC_ppm",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        0.6666666666666666,
+        0.6666666666666666,
+        0.3333333333333333
+      ],
+      "stl": "parts_stl/WC_ppm.stl",
+      "step": "parts/WC_ppm.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669376
+    },
+    {
+      "id": "WC_ppp",
+      "group": "wc",
+      "layer": 3,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/WC_ppp.stl",
+      "step": "parts/WC_ppp.step",
+      "color": [
+        0.12,
+        0.12,
+        0.14
+      ],
+      "volume_mm3": 17545.830110669376
+    },
+    {
+      "id": "FirstStage_pX",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        0.788675134594813,
+        -0.21132486540518716,
+        0.5773502691896258
+      ],
+      "stl": "parts_stl/FirstStage_pX.stl",
+      "step": "parts/FirstStage_pX.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01456702339
+    },
+    {
+      "id": "FirstStage_mX",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        -0.788675134594813,
+        0.21132486540518716,
+        -0.5773502691896258
+      ],
+      "stl": "parts_stl/FirstStage_mX.stl",
+      "step": "parts/FirstStage_mX.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01494707105
+    },
+    {
+      "id": "FirstStage_pY",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        -0.21132486540518713,
+        0.7886751345948129,
+        0.5773502691896257
+      ],
+      "stl": "parts_stl/FirstStage_pY.stl",
+      "step": "parts/FirstStage_pY.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01503050867
+    },
+    {
+      "id": "FirstStage_mY",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        0.21132486540518713,
+        -0.7886751345948129,
+        -0.5773502691896257
+      ],
+      "stl": "parts_stl/FirstStage_mY.stl",
+      "step": "parts/FirstStage_mY.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01399171067
+    },
+    {
+      "id": "FirstStage_pZ",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        -0.5773502691896258,
+        -0.5773502691896258,
+        0.5773502691896258
+      ],
+      "stl": "parts_stl/FirstStage_pZ.stl",
+      "step": "parts/FirstStage_pZ.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01133867016
+    },
+    {
+      "id": "FirstStage_mZ",
+      "group": "first_stage",
+      "layer": 2,
+      "thrust": [
+        0.5773502691896258,
+        0.5773502691896258,
+        -0.5773502691896258
+      ],
+      "stl": "parts_stl/FirstStage_mZ.stl",
+      "step": "parts/FirstStage_mZ.step",
+      "color": [
+        0.78,
+        0.82,
+        0.86
+      ],
+      "volume_mm3": 101009.01523305493
+    },
+    {
+      "id": "Cell_MgO_Octahedron",
+      "group": "cell_mgo",
+      "layer": 4,
+      "thrust": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "stl": "parts_stl/Cell_MgO_Octahedron.stl",
+      "step": "parts/Cell_MgO_Octahedron.step",
+      "color": [
+        0.55,
+        0.3,
+        0.22
+      ],
+      "volume_mm3": 175.93438533610262
+    },
+    {
+      "id": "Cell_ZrO2_Sleeve",
+      "group": "cell_insulator",
+      "layer": 4,
+      "thrust": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "stl": "parts_stl/Cell_ZrO2_Sleeve.stl",
+      "step": "parts/Cell_ZrO2_Sleeve.step",
+      "color": [
+        0.92,
+        0.9,
+        0.86
+      ],
+      "volume_mm3": 9.744833777552138
+    },
+    {
+      "id": "Cell_ZrO2_Disk_Top",
+      "group": "cell_insulator",
+      "layer": 4,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/Cell_ZrO2_Disk_Top.stl",
+      "step": "parts/Cell_ZrO2_Disk_Top.step",
+      "color": [
+        0.9,
+        0.88,
+        0.84
+      ],
+      "volume_mm3": 3.5518473866334395
+    },
+    {
+      "id": "Cell_ZrO2_Disk_Bottom",
+      "group": "cell_insulator",
+      "layer": 4,
+      "thrust": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "stl": "parts_stl/Cell_ZrO2_Disk_Bottom.stl",
+      "step": "parts/Cell_ZrO2_Disk_Bottom.step",
+      "color": [
+        0.9,
+        0.88,
+        0.84
+      ],
+      "volume_mm3": 3.5518473866334395
+    },
+    {
+      "id": "Cell_Furnace_LaCrO3",
+      "group": "cell_furnace",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "stl": "parts_stl/Cell_Furnace_LaCrO3.stl",
+      "step": "parts/Cell_Furnace_LaCrO3.step",
+      "color": [
+        0.22,
+        0.2,
+        0.18
+      ],
+      "volume_mm3": 5.16105280747435
+    },
+    {
+      "id": "Cell_Spacer_Top",
+      "group": "cell_spacer",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/Cell_Spacer_Top.stl",
+      "step": "parts/Cell_Spacer_Top.step",
+      "color": [
+        0.78,
+        0.72,
+        0.62
+      ],
+      "volume_mm3": 0.6615608305771153
+    },
+    {
+      "id": "Cell_Spacer_Bottom",
+      "group": "cell_spacer",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "stl": "parts_stl/Cell_Spacer_Bottom.stl",
+      "step": "parts/Cell_Spacer_Bottom.step",
+      "color": [
+        0.78,
+        0.72,
+        0.62
+      ],
+      "volume_mm3": 0.6615608305771156
+    },
+    {
+      "id": "Cell_Capsule",
+      "group": "cell_sample",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "stl": "parts_stl/Cell_Capsule.stl",
+      "step": "parts/Cell_Capsule.step",
+      "color": [
+        0.72,
+        0.74,
+        0.78
+      ],
+      "volume_mm3": 0.6192286610617487
+    },
+    {
+      "id": "Cell_Sample",
+      "group": "cell_sample",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "stl": "parts_stl/Cell_Sample.stl",
+      "step": "parts/Cell_Sample.step",
+      "color": [
+        0.25,
+        0.65,
+        0.35
+      ],
+      "volume_mm3": 0.4823694956948991
+    },
+    {
+      "id": "Cell_Electrode_Top",
+      "group": "cell_electrode",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/Cell_Electrode_Top.stl",
+      "step": "parts/Cell_Electrode_Top.step",
+      "color": [
+        0.55,
+        0.5,
+        0.35
+      ],
+      "volume_mm3": 1.8046626608602627
+    },
+    {
+      "id": "Cell_Electrode_Bottom",
+      "group": "cell_electrode",
+      "layer": 5,
+      "thrust": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "stl": "parts_stl/Cell_Electrode_Bottom.stl",
+      "step": "parts/Cell_Electrode_Bottom.step",
+      "color": [
+        0.55,
+        0.5,
+        0.35
+      ],
+      "volume_mm3": 1.8046626608602625
+    },
+    {
+      "id": "Cell_Thermocouple",
+      "group": "cell_tc",
+      "layer": 5,
+      "thrust": [
+        -0.1051163699633559,
+        0.39229963341045115,
+        0.9138115486202572
+      ],
+      "stl": "parts_stl/Cell_Thermocouple.stl",
+      "step": "parts/Cell_Thermocouple.step",
+      "color": [
+        0.92,
+        0.72,
+        0.12
+      ],
+      "volume_mm3": 0.23476034825700048
+    },
+    {
+      "id": "Hatbox",
+      "group": "hatbox",
+      "layer": 1,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/Hatbox.stl",
+      "step": "parts/Hatbox.step",
+      "color": [
+        0.72,
+        0.76,
+        0.8
+      ],
+      "volume_mm3": 816881.7242160747
+    },
+    {
+      "id": "EndRing_Top",
+      "group": "end_ring",
+      "layer": 0,
+      "thrust": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "stl": "parts_stl/EndRing_Top.stl",
+      "step": "parts/EndRing_Top.step",
+      "color": [
+        0.55,
+        0.58,
+        0.62
+      ],
+      "volume_mm3": 256631.67722998938
+    },
+    {
+      "id": "EndRing_Bottom",
+      "group": "end_ring",
+      "layer": 0,
+      "thrust": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "stl": "parts_stl/EndRing_Bottom.stl",
+      "step": "parts/EndRing_Bottom.step",
+      "color": [
+        0.55,
+        0.58,
+        0.62
+      ],
+      "volume_mm3": 256631.67722998935
+    }
+  ],
+  "wc_overlap_mm3": 0.0
+}

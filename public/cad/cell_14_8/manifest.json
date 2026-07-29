@@ -1,0 +1,227 @@
+{
+  "units": "mm",
+  "scale_to_scene": 0.09,
+  "version": "1785285216",
+  "press_axis": [
+    0,
+    0,
+    1
+  ],
+  "cell": "14/8 face-bore + face TC grooves + wires to sample (no bead)",
+  "parameters": {
+    "octa_edge": 14.0,
+    "mid_r": 9.305525240414966,
+    "face_half_h": 5.372547502504438,
+    "bore_r": 2.6,
+    "tc_groove_w": 0.48,
+    "tc_groove_d": 0.45,
+    "sample_h": 1.4,
+    "sample_r": 0.78
+  },
+  "parts": [
+    {
+      "id": "Cell_MgO_Octahedron",
+      "group": "cell_mgo",
+      "layer": 0,
+      "thrust": [
+        0,
+        0,
+        0
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_MgO_Octahedron.stl?v=1785285216",
+      "color": [
+        0.55,
+        0.3,
+        0.22
+      ],
+      "volume_mm3": 844.3546005549803
+    },
+    {
+      "id": "Cell_ZrO2_Sleeve",
+      "group": "cell_insulator",
+      "layer": 1,
+      "thrust": [
+        0,
+        0,
+        0
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_ZrO2_Sleeve.stl?v=1785285216",
+      "color": [
+        0.92,
+        0.9,
+        0.86
+      ],
+      "volume_mm3": 42.85132379496482
+    },
+    {
+      "id": "Cell_ZrO2_Disk_Top",
+      "group": "cell_insulator",
+      "layer": 1,
+      "thrust": [
+        0,
+        0,
+        1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_ZrO2_Disk_Top.stl?v=1785285216",
+      "color": [
+        0.9,
+        0.88,
+        0.84
+      ],
+      "volume_mm3": 15.614500886504668
+    },
+    {
+      "id": "Cell_ZrO2_Disk_Bottom",
+      "group": "cell_insulator",
+      "layer": 1,
+      "thrust": [
+        0,
+        0,
+        -1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_ZrO2_Disk_Bottom.stl?v=1785285216",
+      "color": [
+        0.9,
+        0.88,
+        0.84
+      ],
+      "volume_mm3": 15.614500886504668
+    },
+    {
+      "id": "Cell_Furnace_LaCrO3",
+      "group": "cell_furnace",
+      "layer": 2,
+      "thrust": [
+        0,
+        0,
+        0
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Furnace_LaCrO3.stl?v=1785285216",
+      "color": [
+        0.22,
+        0.2,
+        0.18
+      ],
+      "volume_mm3": 22.694865329532664
+    },
+    {
+      "id": "Cell_Spacer_Top",
+      "group": "cell_spacer",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Spacer_Top.stl?v=1785285216",
+      "color": [
+        0.78,
+        0.72,
+        0.62
+      ],
+      "volume_mm3": 1.9049832453205116
+    },
+    {
+      "id": "Cell_Spacer_Bottom",
+      "group": "cell_spacer",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        -1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Spacer_Bottom.stl?v=1785285216",
+      "color": [
+        0.78,
+        0.72,
+        0.62
+      ],
+      "volume_mm3": 1.9049832453205113
+    },
+    {
+      "id": "Cell_Capsule",
+      "group": "cell_sample",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        0
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Capsule.stl?v=1785285216",
+      "color": [
+        0.75,
+        0.78,
+        0.82
+      ],
+      "volume_mm3": 2.568636525250455
+    },
+    {
+      "id": "Cell_Sample",
+      "group": "cell_sample",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        0
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Sample.stl?v=1785285216",
+      "color": [
+        0.2,
+        0.72,
+        0.38
+      ],
+      "volume_mm3": 2.6758829586216417
+    },
+    {
+      "id": "Cell_Electrode_Top",
+      "group": "cell_electrode",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Electrode_Top.stl?v=1785285216",
+      "color": [
+        0.55,
+        0.5,
+        0.35
+      ],
+      "volume_mm3": 7.935270343886119
+    },
+    {
+      "id": "Cell_Electrode_Bottom",
+      "group": "cell_electrode",
+      "layer": 3,
+      "thrust": [
+        0,
+        0,
+        -1
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Electrode_Bottom.stl?v=1785285216",
+      "color": [
+        0.55,
+        0.5,
+        0.35
+      ],
+      "volume_mm3": 7.9352703438861205
+    },
+    {
+      "id": "Cell_Thermocouple",
+      "group": "cell_tc",
+      "layer": 4,
+      "thrust": [
+        0.4,
+        0,
+        0.3
+      ],
+      "stl": "cell_14_8/parts_stl/Cell_Thermocouple.stl?v=1785285216",
+      "color": [
+        0.92,
+        0.72,
+        0.12
+      ],
+      "volume_mm3": 2.344532817097072
+    }
+  ]
+}

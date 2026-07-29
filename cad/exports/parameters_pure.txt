@@ -1,0 +1,15 @@
+Walker pure-python mesh — closed size chain
+==================================================
+a = 32.0
+d_cut = 5.65685424949238
+octa_mid_r = 5.50685424949238
+r_pkg_xy = 52.255781179374466
+r_inner = 75.75578117937447
+r_outer = 93.75578117937447
+hatbox_h = 110.0
+
+Rules:
+- press axis +Z = cube [111]
+- d_cut = TEL/sqrt(2); octa_mid_r ≈ d_cut
+- first-stage outer = cylinder r_inner about +Z
+- pad plane n·r = a (package face)

@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta http-equiv="X-UA-Compatible" content="IE=9" /><meta content="Ametys CMS Open source (http://www.ametys.org)" name="generator" /><link href="/kernel/resources/img/runtime_favico.gif" type="image/gif" rel="icon" /><link href="/kernel/resources/img/runtime_favico.ico" type="image/x-icon" rel="shortcut icon" /><script src="/plugins/jquery/resources/js/jquery.min.js" type="text/javascript"></script><script src="/plugins/jquery-ui/resources/js/jquery-ui.min.js" type="text/javascript"></script><script type="text/javascript"><!--
+
+              	$j = jQuery.noConflict();
+		
+--></script><script src="/plugins/web/resources/js/jquery.cookie.js" type="text/javascript"></script><script src="/plugins/pirobox_ext/resources/pirobox_extended_min.js" type="text/javascript"></script><script type="text/javascript"><!--
+
+                $j(document).ready(function() {
+                    $j().piroBox_ext({
+                        piro_speed: 600,
+                        bg_alpha: 0.5,
+                        piro_scroll: true,
+                        prev_label: 'Previous',
+                        next_label: 'Next',
+                        close_label: 'Close'
+                    });
+                });
+	        
+--></script><script type="text/javascript"><!--
+
+            ametysFOUser = null;
+            
+            
+--></script><script type="text/javascript"><!--
+
+	       ametysCookieConsentListener = [];
+	        
+           
+		        function ametysCallCookieConsentListener(accept)
+		        {
+		            for (var i = 0; i < ametysCookieConsentListener.length; i++)
+		            {
+		               ametysCookieConsentListener[i].apply(window, [accept]);
+		            }
+		        }
+
+		        
+			        var ametysCookieExpireDay = 390;
+				    
+				    function ametysRefuseCookieConsent()  
+			        {
+			            $j.cookie('ametysHasConsent', false, {expires: ametysCookieExpireDay, path: '' || '/'});
+			            
+			            ametysCallCookieConsentListener(false);
+			            ametysHideInformCookieConsent();
+			        }
+			
+			        function ametysAcceptCookieConsent()
+			        {
+			            $j.cookie('ametysHasConsent', true, {expires: ametysCookieExpireDay, path: '' || '/'});
+			            
+			            
+		    	            ametysCallCookieConsentListener(true);
+			            
+			            ametysHideInformCookieConsent();
+			        }
+			
+			        function ametysHideInformCookieConsent() 
+			        {
+			            $j("#cookie-banner").hide();
+			        }
+			        
+		        
+--></script><link media="screen" type="text/css" href="/skins/impmc/resources/css/jquery/jquery-ui-1.9.1.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" title="black" media="screen" href="/plugins/pirobox_ext/resources/css/style_2/style.css" /><meta content="IE=9" http-equiv="X-UA-Compatible" /><meta content="UPMC - Universit&eacute; Pierre et Marie Curie" name="author" /><meta content="UPMC - Universit&eacute; Pierre et Marie Curie" name="copyright" /><meta content="en" name="language" /><meta content="15 days" name="revisit-aftert" /><meta content="IE=8" http-equiv="X-UA-Compatible" /><meta name="keywords" content="Universit&eacute;, sciences, technologies, m&eacute;decine, Curie, Paris, paris 6, paris VI, UPMC, Jussieu, Piti&eacute;-Salp&ecirc;tri&egrave;re, Saint-Antoine, Cordeliers, Roscoff, Banyuls-sur-mer, Villefranche-sur-mer, math&eacute;matiques, informatique, physique, chimie, ing&eacute;nierie, biologie, sciences de la Vie, sciences de la Terre." /><meta name="description" content="1er complexe scientifique et m&eacute;dical de France, 7e universit&eacute; europ&eacute;enne, l&#039;universit&eacute; Pierre et Marie Curie - UPMC couvre l&#039;ensemble des champs disciplinaires en science, technologie et m&eacute;decine. Avec sa recherche de pointe, ses formations de haut niveau et son rayonnement international, elle incarne l&#039;excellence fran&ccedil;aise de l&#039;enseignement sup&eacute;rieur et de la recherche." /><!----><link href="/skins/impmc/resources/css/print.css" media="print" type="text/css" rel="stylesheet" /><link href="/skins/impmc/resources/css/ametys.css" type="text/css" rel="stylesheet" /><link href="/skins/impmc/resources/css/thickbox.css" type="text/css" rel="stylesheet" /><link rel="stylesheet" href="/skins/impmc/resources/css/upmc-page-layout.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/upmc-page-layout-en.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/patch.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/styles/bleu/css/upmc-page-coul-bleu.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/styles/bleu/css/upmc-page-coul-bleu-en.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/jquery.treeview.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/form.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/upmc-page-subsubmenu.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/upmc-page-swap-img_to_txt.css" type="text/css" /><link rel="stylesheet" href="/skins/impmc/resources/css/cookiebanner.css" type="text/css" /><!--[if IE ]>
+			<link rel="stylesheet" type="text/css" href="{ametys:skinURL('css/patch-ie.css')}" media="screen" />
+			<link rel="stylesheet" type="text/css" href="/skins/impmc/resources//css/upmc-page-ie7.css media="screen" />
+		<![endif]--><!--[if lte IE 6]>
+			<link rel="stylesheet" type="text/css" href="{ametys:skinURL('css/patch-ie6.css')}" media="screen" />
+			<link rel="stylesheet" type="text/css" href="{ametys:skinURL('css/upmc-page-ie6.css')}" media="screen" />
+		<![endif]--><!--[if IE 8]>
+			<link rel="stylesheet" type="text/css" href="{ametys:skinURL('css/upmc-page-ie8.css')}" media="screen" />
+		<![endif]--><title>Multi-Anvil Press - Institut de min&eacute;ralogie, de physique des mat&eacute;riaux et de cosmochimie</title><link href="/en/rss.xml" title="RSS news file from the home page" type="application/rss+xml" rel="alternate" /><link href="/_plugins/web/gestionlabo2/en/filter/org.ametys.plugins.calendar.events.EventsFilter/rss.xml" title="News RSS feed for site" type="application/rss+xml" rel="alternate" /><link href="/_plugins/web/gestionlabo2/en/filter/org.ametys.web.article.RSS/rss.xml" title="Articles RSS feed for site" type="application/rss+xml" rel="alternate" /><script type="text/javascript"><!--
+
+			var open_all_label = "Open all"
+			var close_all_label = "Close all"
+			var open_label = "Open"
+			var close_label = "Close"
+		
+--></script><script src="/skins/impmc/resources/js/page-scripts.js" type="text/javascript"><!--
+empty
+--></script><script src="/skins/impmc/resources/js/page-menu.js" type="text/javascript"><!--
+empty
+--></script><script src="/skins/impmc/resources/js/jquery.treeview.js" type="text/javascript"><!--
+empty
+--></script><script src="/skins/impmc/resources/js/page-subsubmenu.js" type="text/javascript"><!--
+empty
+--></script><noscript></noscript><script type="text/javascript"><!--
+
+				var imagesUriPrefix = "/skins/impmc/resources/";
+			
+--></script><script type="text/javascript"><!--
+
+			      var _paq = _paq || [];
+			      _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+			
+			      (function() {
+			        var u=(("https:" == document.location.protocol) ? "https://" : "http://") + "cmsstat.ent.upmc.fr/piwik//";
+			        _paq.push(["setTrackerUrl", u+"piwik.php"]);
+                    
+                    var searchTracking = false;
+                    
+                        var searchKeyword = "";
+                        if (searchKeyword != '')
+                        {
+                            // Internal search tracking on a search result page
+                            _paq.push(["trackSiteSearch", searchKeyword, false, false]);
+                            searchTracking = true;
+                        }
+                    
+                    
+                    if (!searchTracking)
+                    {
+                        _paq.push(["trackPageView"]);
+                    }
+			      	_paq.push(["enableLinkTracking"]);
+			        _paq.push(["setSiteId", "30"]);
+			        var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+			        g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+			      })();
+			
+			
+--></script><noscript><div><img alt="" style="border:0" src="http://cmsstat.ent.upmc.fr/piwik//piwik.php?idsite=30&amp;rec=1" /></div></noscript><link media="screen, print, handheld" href="/skins/impmc/resources/css/content/content.css" type="text/css" rel="stylesheet" /><link href="/plugins/cms/dublincore/content.rdf?contentId=defaultWebContent://8fdda489-a320-4280-85e4-8abc31907e7e" rel="meta" /></head><body><p id="easy-access"><a accesskey="s" href="#content_anchor">Go to content</a>&nbsp;<a href="#navigation">Go to the menu</a>&nbsp;<a accesskey="r" href="#research">Go to the search</a></p><div class="maincontainer"><div class="leftcolumn"><div id="illus" class="illus"><div class="logotube"><a title="Logo UPMC" class="logo" accesskey="1" href="/en/index.html"><img alt="logo UPMC" src="/skins/impmc/resources/img/upmc-logotype.gif" /></a></div><div id="img" style="background-image: url(&#039;/_resources/skin-img/illus-leftcolumn3.gif&#039;);"></div><div class="submenu"><a name="navigation"><!--empty--></a><div class="title-section"><span class="hidden-L"><!--empty-->Navigation in this section&nbsp;</span><a href=""></a></div><ul><li class="not-selected"><a title="Welcome" href="/en/index.html" class="first">Home</a></li><li class="not-selected"><a title="Institute" href="http://impmc.sorbonne-universite.fr/en/institute.html" class="top-border">Institute</a></li><li class="not-selected"><a title="Research teams" href="http://impmc.sorbonne-universite.fr/en/research_teams.html" class="top-border">Research teams</a></li><li class="not-selected"><a title="Transverse axis" href="http://impmc.sorbonne-universite.fr/en/transverse-axis.html" class="top-border">Transverse axis</a></li><li class="not-selected"><a title="Research projects" href="http://impmc.sorbonne-universite.fr/en/research-projects.html" class="top-border">Research projects</a></li><li class="not-selected"><a title="Publications" href="http://impmc.sorbonne-universite.fr/en/publications.html" class="top-border">Publications</a></li><li class="select"><span class="selected-span"><a title="Equipments" href="http://impmc.sorbonne-universite.fr/en/equipments.html">Equipments</a></span><ul><li><a title="Go to X-Ray diffraction Platform" href="http://impmc.sorbonne-universite.fr/en/equipments/x-ray-diffraction-platform-1.html">X-Ray diffraction Platform</a></li><li><a title="Go to Spectroscopy platform" href="http://impmc.sorbonne-universite.fr/en/equipments/spectroscopy-platform.html">Spectroscopy platform</a></li><li><a title="Go to The SEM-FIB microscopy facility" href="http://impmc.sorbonne-universite.fr/en/equipments/the-sem-fib-microscopy-facility-at-impmc.html">The SEM-FIB microscopy facility</a></li><li><a title="Go to High Pressure Platform" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2.html" class="current">High Pressure Platform</a></li></ul></li><li class="not-selected"><a title="Events" href="http://impmc.sorbonne-universite.fr/en/events.html">Events</a></li><li class="not-selected"><a title="Press Review" href="http://impmc.sorbonne-universite.fr/en/press-review.html" class="top-border">Press Review</a></li></ul></div><div class="innertube"><a name="navigation"><!--empty--></a><div class="links"><span class="hidden-L">Subscription last news</span><ul></ul></div></div><div class="partner innertube"><span class="hidden-L">Partners</span><a href="http://impmc.sorbonne-universite.fr/en/sorbonne-universite.html" title="Sorbonne Universit&eacute;"><img src="/skins/impmc/resources//img/partner/logo1.gif" alt="Sorbonne Universit&eacute;" /></a><a href="http://impmc.sorbonne-universite.fr/en/cnrs.html" title="CNRS"><img src="/skins/impmc/resources//img/partner/logo2.gif" alt="CNRS" /></a><a href="http://impmc.sorbonne-universite.fr/en/mnhn.html" title="MNHN"><img src="/skins/impmc/resources//img/partner/logo3.gif" alt="MNHN" /></a></div></div></div><div class="contentwrapper"><div class="contentcolumn"><div class="innertube"><div class="researchandaccess fluid"><span class="hidden-L">Quick access, personalized services</span><div class="toolslinks fluid"><div class="flags"><div class="translation"><a name="translation"></a><span class="hidden-L">Traductions :</span><ul><li><a class="flag french" title="Version fran&ccedil;aise" href="/fr/index.html"><span class="hidden-L">Version fran&ccedil;aise</span></a></li><li><a class="flag english active" title="English version" href="/en/index.html"><span class="hidden-L">English version</span></a></li><li><a class="flag spain" title="Versi&oacute;n espa&ntilde;ola" href="/es/index.html"><span class="hidden-L">Versi&oacute;n espa&ntilde;ola</span></a></li><li><a class="flag china" title="中文版" href="/zh/index.html"><span class="hidden-L">中文版</span></a></li><li><a class="flag japan" title="nihongo" href="/ja/index.html"><span class="hidden-L">nihongo</span></a></li></ul></div></div><ul><li><a title="Contacts" accesskey="7" class="contact" href="http://impmc.sorbonne-universite.fr/en/contacts.html">Contacts</a> |</li><li><a title=" Directory" href="http://impmc.sorbonne-universite.fr/en/directory.html">Directory</a> |</li><li class="last"><a title=" Campus maps" href="http://impmc.sorbonne-universite.fr/en/acces-map.html">Campus maps</a> |</li></ul></div><div class="title"><div class="title-site"><strong>Institut de min&eacute;ralogie, de physique des mat&eacute;riaux et de cosmochimie</strong><br />UMR 7590 - UPMC/CNRS/IRD/MNHN</div></div></div><div class="breadcrumbandtitle fluid"><div class="breadcrumb"><span class="hidden-L">Path</span><a title="Welcome" href="/en/index.html" class="home">Home</a> / <a title="Equipments" href="http://impmc.sorbonne-universite.fr/en/equipments.html">Equipments</a> / <a title="High Pressure Platform" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2.html">High Pressure Platform</a> / <a title="Equipment" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment.html">Equipment</a> / Multi-Anvil Press</div><div class="title-section">Equipments</div></div><div class="content"><a name="content_anchor"><!--empty--></a><div class="table"><div class="content-left"><div id="ametys-cms-zone-default"><div id="ametys-cms-zone-default-item-N10065" class="first last"><div class="ametys-cms-content article view-main wrapper"><h1 class="postheader"><span class="content-title summary">Multi-Anvil Press</span></h1><div class="content-div"><div><p>The High Pressure platform disposes a multi-anvil press of 800 tons that can achieve pressures up to 22 GPa and temperatures up to 2000&nbsp;<sup>o</sup>C with the new Walker module that has been installed. Different assemblies (14/8, 10/5, 10/4) can be used with WC cubes of 32 mm. The heating of the sample can be done with graphite or rhenium ovens. The temperature of the sample can be measured in-situ with a type-C or type-D thermocouple.&nbsp;&nbsp;The multi-anvil press allows carrying out synthesis experiments at very stable high pressure and temperature conditions for a long time (many days).&nbsp;</p><p><span class="image-wrapper simple" style="display: inline-block; text-align: center"><img src="/_contents-images/ametys-internal%253Asites/gestionlabo2/ametys-internal%253Acontents/multi-anvil-press-article/_metadata/content/_data/Presse_Multi-Enclumes.jpg_351x468" alt="" width="468" height="351" /></span></p><p class="secondary">&copy; IMPMC</p><p class="secondary">&nbsp;</p><p><a href="https://calendar.google.com/calendar/embed?src=em280si64vs4m9e9r06na37cd4%40group.calendar.google.com&amp;ctz=Europe%2FParis" class="external" onclick="window.open(this.href); return false;">See the schedule</a></p></div></div><div class="content-richtext-end"><!--empty--></div><div class="meta"><p>C&eacute;cile Duflot<span class="date"> - 23/06/21</span></p></div></div></div></div></div><div class="content-focus"><div class="tools"><!--empty--><div class="sharethis"><script type="text/javascript"><!--
+
+			document.write("<div class='print-with-separator'><a href=\"javascript:window.print();\" title=\"Print page\"><img alt=\"Print page\" src=\"/skins/impmc/resources/img/Print.png\"/></a></div>");
+		
+--></script><div class="sharethis-wrapper"><script type="text/javascript"><!--
+
+			var switchTo5x=true; // Multi Post
+			$j(document).ready(function() 
+			{
+				var baseUrl = document.location.protocol == 'https:' ? 'https://ws.' : 'http://w.';
+				$j.getScript(baseUrl + "sharethis.com/button/buttons.js", function(data, textStatus) {stLight.options({publisher:'7fcfec1e-16ef-41a0-8902-67b9f511c6ba'}); });
+			});
+		
+--></script><script type="text/javascript"><!--
+document.write("<span class='st_twitter'></span>");document.write("<span class='st_facebook'></span>");document.write("<span class='st_linkedin'></span>");document.write("<span class='st_googleplus'></span>");document.write("<span class='st_pinterest'></span>");document.write("<span class='st_sharethis'></span>");
+--></script></div></div><div class="flags"><div class="translation"><a name="translation"></a><span class="hidden-L">Traductions :</span><ul><li>Lire cet article en<a class="flag french" title="Version fran&ccedil;aise" href="http://impmc.sorbonne-universite.fr/fr/plateformes-et-equipements/plateforme-conditions-extremes/equipements/presse-multi-enclumes.html"><span class="hidden-L">Version fran&ccedil;aise</span></a></li></ul></div></div></div><div class="same-rub"><h3 class="hidden-L">Also in the section</h3><div class="innertube"><ul id="same-rub-list"><li><a title="Go to Diamond Anvil Cells" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/diamond-anvil-cells.html">Diamond Anvil Cells</a></li><li><a title="Go to Pressure Drives" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/pressure-drives.html">Pressure Drives</a></li><li><a title="Go to Microscopes" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/microscopes.html">Microscopes</a></li><li><a title="Go to Electro Erosion Drilling " href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/electro-erosion-drilling.html">Electro Erosion Drilling </a></li><li><a title="Go to Pressure by Ruby Luminescence (PRL)" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/pressure-by-ruby-luminescence-prl.html">Pressure by Ruby Luminescence (PRL)</a></li><li><a title="Go to Gas Loading System" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/gas-loading-system.html">Gas Loading System</a></li><li><a title="Go to fs Laser Machining" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/fs-laser-machining.html">fs Laser Machining</a></li><li><a title="Go to Micromanipulator" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/micromanipulator.html">Micromanipulator</a></li><li><a title="Go to Laser Heating ex-situ" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/laser-heating-ex-situ.html">Laser Heating ex-situ</a></li><li><a title="Go to Other Equipment" href="http://impmc.sorbonne-universite.fr/en/equipments/high-pressure-platform-2/equipment/other-equipment.html">Other Equipment</a></li></ul></div></div><div id="ametys-cms-zone-zone-heritee-1"></div><div id="ametys-cms-zone-zone-heritee-2"></div><div id="ametys-cms-zone-zone-heritee-3"></div><div id="ametys-cms-zone-zone-heritee-4"></div><div id="ametys-cms-zone-zone-heritee-5"></div><div id="ametys-cms-zone-zone-droite-1"></div><div id="ametys-cms-zone-zone-droite-2"></div></div></div></div></div></div></div><div class="footer clear-B"><div class="adress"><div class="innertube">UPMC<br />
+				4 place Jussieu 75005 Paris, France<br />
+				T&eacute;l. +33 1 44 27 44 27</div></div><div class="footerlinks"><div class="innertube"><a title="Legal information" accesskey="8" href="http://impmc.sorbonne-universite.fr/en/legal-information.html">Legal information</a> | <a title="Accessibility" accesskey="0" href="http://impmc.sorbonne-universite.fr/en/accessibility.html">Accessibility</a></div></div></div></div><script type="text/javascript"><!--
+
+		                (function() { // anonymous function for scope purposes
+		                        // Show the information banner to the top of the page
+		                        function showBanner()
+		                        {
+		                            if (ametysCookieConsentListener.length > 0)
+		                            {
+		                                
+        var html = '<div class="cookiebanner-wrapper" id="cookie-banner">'
+        + '<div class="cookiebanner">'
+        + '<div class="cookiebanner-info">'
+        + "By continuing to browse this site, you're accepting the use of cookies to collect anonymous visitor statistics."
+        + ' '
+        + '</div>'
+        + '<div class="cookiebanner-buttons">'
+        + '<a href="javascript:ametysAcceptCookieConsent()" class="cookiebanner-accept">'
+        + "OK"
+        + '</a>'
+        + ' '
+        + '<a href="javascript:ametysRefuseCookieConsent()" class="cookiebanner-refuse">'
+        + "Refuse"
+        + '</a>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    
+		                                $j(document.body).prepend(html).addClass('cookiebanner-visible');
+		                            }
+		                        }
+		                    
+		                        // Get the Internet Explorer version, return -1 if not IE
+		                        function getInternetExplorerVersion() {
+		                            var rv = -1;
+		                            if ($j.browser.msie)  
+		                            {
+		                                rv = $j.browser.version;
+		                            } 
+		                            
+		                            return rv;
+		                        }
+		                        
+		                        // Check the navigator value DoNotTrack to know if the signal is activated and equal to 1
+		                        function notToTrack() {
+		                            if ( (navigator.doNotTrack && (navigator.doNotTrack=='yes' || navigator.doNotTrack=='1'))
+		                                || ( navigator.msDoNotTrack && navigator.msDoNotTrack == '1') ) {
+		                                var isIE = (getInternetExplorerVersion()!=-1)
+		                                if (!isIE){    
+		                                     return true;
+		                                }
+		                                return false;
+		                            }
+		                        }
+		                    
+		                        // If the signal equals 0, consent is true
+		                        function isToTrack() {
+		                            if ( navigator.doNotTrack && (navigator.doNotTrack=='no' || navigator.doNotTrack==0 )) {
+		                                return true;
+		                            }
+		                        }
+		                        
+		                        
+					            var consentCookie =  $j.cookie('ametysHasConsent');
+		                        if (consentCookie == null) 
+		                        {
+		                            // The user has no cookies, we show the banner. 
+		                            if (notToTrack()) 
+		                            { 
+		                                // Internet explorer DoNotTrack is not activated. Do not ask for consent and just opt him out
+		                                ametysCallCookieConsentListener(false);
+		                            } 
+		                            else if (isToTrack()) 
+		                            { 
+		                                // Internet explorer DoNotTrack is activated. Do not ask for consent and just opt him in
+		                                ametysCallCookieConsentListener(true);
+		                            } 
+		                            else 
+		                            {
+		                                  
+		                            
+		                                // Otherwise ask the user
+		                                $j(window).on("load", showBanner);
+		                            }
+		                        } 
+		                        else 
+		                        {
+		                            ametysCallCookieConsentListener(consentCookie == 'true');
+		                        }
+		                    })();
+	               
+--></script></body></html>

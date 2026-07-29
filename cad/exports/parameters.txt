@@ -1,0 +1,27 @@
+Walker 14/8-class module — closed size chain
+press +Z = cube [111]
+first-stage outer = true cylinder about +Z
+end rings = uniaxial load path into 3+3 anvils
+
+a = 26.0
+d_cut = 5.65685424949238
+doc_name = WalkerTypeModule_14_8
+end_ring_inner_scale = 0.55
+end_ring_thick = 14.0
+first_stage_kerf = 0.25
+first_stage_radial_depth = 20.0
+flange_extra = 10.0
+flange_thick = 9.0
+furnace_bore_r = 3.5
+hatbox_clearance = 1.2
+hatbox_h = 100.0
+hatbox_height = 100.0
+hatbox_wall = 16.0
+octa_clearance = 0.08
+octa_edge = 14.0
+octa_mid_r = 9.107535341682732
+r_inner = 63.657822208241754
+r_outer = 79.65782220824175
+r_pkg_xy = 42.45782220824175
+tel = 8.0
+wc_edge = 26.0
