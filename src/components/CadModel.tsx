@@ -3,7 +3,7 @@ import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import * as THREE from 'three';
-import { layerExplosion, useWalkerStore } from '../store/useWalkerStore';
+import { easeOutCubic, layerExplosion, useWalkerStore } from '../store/useWalkerStore';
 import type { CadManifest, CadPartMeta } from '../cad/types';
 
 /** Public asset URL with Vite base (works on GitHub Pages /repo-name/). */

@@ -86,7 +86,6 @@ export function Scene() {
   const viewMode = useWalkerStore((s) => s.viewMode);
   const clearSelection = useWalkerStore((s) => s.setSelectedPart);
   const isFull = viewMode === 'full';
-  const isCad = viewMode === 'cad';
   const isCell = viewMode === 'cell';
 
   const cam = isFull
