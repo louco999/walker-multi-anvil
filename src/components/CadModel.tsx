@@ -1,9 +1,10 @@
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import { useLoader, useThree } from '@react-three/fiber';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import * as THREE from 'three';
-import { easeOutCubic, layerExplosion, useWalkerStore } from '../store/useWalkerStore';
+import { layerExplosion, useWalkerStore } from '../store/useWalkerStore';
+import { thermalColor } from '../geometry/materials';
 import type { CadManifest, CadPartMeta } from '../cad/types';
 
 /** Public asset URL with Vite base (works on GitHub Pages /repo-name/). */
@@ -11,6 +12,62 @@ function publicUrl(path: string): string {
   const base = import.meta.env.BASE_URL || '/';
   const clean = path.replace(/^\/+/, '');
   return `${base}${clean}`;
+}
+
+/** How strongly this cell part glows when the run heats up (core hottest). */
+function cellHeatRole(meta: CadPartMeta): number {
+  const { group, id } = meta;
+  if (group === 'cell_sample' && id.includes('Sample')) return 1.0;
+  if (group === 'cell_sample') return 0.72;
+  if (group === 'cell_furnace') return 0.9;
+  if (group === 'cell_spacer') return 0.42;
+  if (group === 'cell_electrode') return 0.38;
+  if (group === 'cell_insulator') return 0.32;
+  if (group === 'cell_tc') return 0.55;
+  if (group === 'cell_mgo') return 0.28;
+  return 0.2;
+}
+
+/** Paint vertex colors: center of cell hot, outer cooler (radial + mild axial). */
+function applyCellHeatVertexColors(
+  geo: THREE.BufferGeometry,
+  role: number,
+  temperatureC: number,
+  pressureGPa: number,
+  baseColor: THREE.Color,
+) {
+  const pos = geo.getAttribute('position');
+  if (!pos) return;
+  let colors = geo.getAttribute('color') as THREE.BufferAttribute | null;
+  if (!colors || colors.count !== pos.count) {
+    colors = new THREE.BufferAttribute(new Float32Array(pos.count * 3), 3);
+    geo.setAttribute('color', colors);
+  }
+  geo.computeBoundingSphere();
+  const r0 = Math.max(geo.boundingSphere?.radius ?? 5, 1e-3);
+  const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
+  const pNorm = Math.min(1, pressureGPa / 23);
+  const heatRun = Math.max(tNorm, pNorm * 0.45);
+  const hot = thermalColor(pressureGPa, temperatureC, new THREE.Color());
+  const cool = baseColor.clone().lerp(new THREE.Color('#2a3040'), 0.25);
+  const c = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    // furnace axis = +Z in FreeCAD cell; radial = distance from axis
+    const radial = Math.hypot(x, y) / r0;
+    const axial = Math.abs(z) / r0;
+    // center hot (low radial), sides cooler; mild end-cool
+    const core = Math.exp(-radial * radial * 3.2) * Math.exp(-axial * axial * 0.55);
+    const w = role * (0.22 + 0.78 * core);
+    const h = heatRun * w;
+    c.copy(cool).lerp(hot, Math.min(1, h * 1.15));
+    // keep a bit of material identity when cold
+    if (heatRun < 0.08) c.lerp(baseColor, 0.85);
+    colors.setXYZ(i, c.r, c.g, c.b);
+  }
+  colors.needsUpdate = true;
 }
 
 /** Per-group / per-id PBR so press orange / white / SS / gray read correctly on web. */
@@ -163,8 +220,19 @@ function PartMesh({
 }) {
   const url = publicUrl(`cad/${meta.stl}`);
   const rawGeo = useLoader(STLLoader, url);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const pivotRef = useRef<THREE.Group>(null);
 
-  // Weld STL verts + smooth normals once — raw STL facets shimmer when metal/orbiting
+  const temperatureC = useWalkerStore((s) => s.temperatureC);
+  const pressureGPa = useWalkerStore((s) => s.pressureGPa);
+  const simRunning = useWalkerStore((s) => s.simRunning);
+  const simProgress = useWalkerStore((s) => s.simProgress);
+
+  const isCell = meta.group.startsWith('cell_');
+  // Dial face + hub spin (not the whole gauge body housing)
+  const isGaugeSpin = meta.id.includes('GaugeDial') || meta.id.includes('GaugeHub');
+  const heatRole = isCell ? cellHeatRole(meta) : 0;
+
   const geometry = useMemo(() => {
     let g: THREE.BufferGeometry = rawGeo;
     try {
@@ -174,21 +242,37 @@ function PartMesh({
     }
     g.computeVertexNormals();
     g.computeBoundingSphere();
+    if (isCell) {
+      const [r, g0, b] = meta.color;
+      applyCellHeatVertexColors(g, heatRole, 25, 0, new THREE.Color(r, g0, b));
+    }
     return g;
-  }, [rawGeo]);
+  }, [rawGeo, isCell, heatRole, meta.color]);
 
-  const mat = useMemo(
-    () => materialForCadPart(meta, transparentShell),
-    [meta.color, meta.group, meta.id, transparentShell],
-  );
+  const gaugeCenter = useMemo(() => {
+    if (!isGaugeSpin) return null;
+    geometry.computeBoundingBox();
+    const c = new THREE.Vector3();
+    geometry.boundingBox?.getCenter(c);
+    return c;
+  }, [geometry, isGaugeSpin]);
 
-  // Clip in world +X (half-section). Shared plane instance is fine — constant is fixed.
+  const mat = useMemo(() => {
+    const m = materialForCadPart(meta, transparentShell);
+    if (isCell) {
+      m.vertexColors = true;
+      m.metalness = Math.min(m.metalness, 0.25);
+      m.roughness = Math.max(m.roughness, 0.45);
+    }
+    return m;
+  }, [meta.color, meta.group, meta.id, transparentShell, isCell]);
+
   const clipPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.015), []);
 
   useEffect(() => {
     if (cutaway) {
       mat.clippingPlanes = [clipPlane];
-      mat.clipShadows = false; // clipped shadow maps look blocky/mosaic on WC
+      mat.clipShadows = false;
     } else {
       mat.clippingPlanes = [];
       mat.clipShadows = false;
@@ -196,25 +280,87 @@ function PartMesh({
     mat.needsUpdate = true;
   }, [mat, cutaway, clipPlane]);
 
+  // Cell heat: center hot, sides cooler
+  useEffect(() => {
+    if (!isCell) return;
+    const [r, g0, b] = meta.color;
+    applyCellHeatVertexColors(
+      geometry,
+      heatRole,
+      temperatureC,
+      pressureGPa,
+      new THREE.Color(r, g0, b),
+    );
+    const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
+    mat.emissive.copy(thermalColor(pressureGPa, temperatureC));
+    mat.emissiveIntensity = heatRole * tNorm * 0.85;
+    mat.needsUpdate = true;
+  }, [isCell, geometry, heatRole, temperatureC, pressureGPa, meta.color, mat]);
+
+  // Press top gauges: left follows pressure, right follows temperature
+  useFrame((_, dt) => {
+    if (!isGaugeSpin || !pivotRef.current) return;
+    const isLeft = meta.id.includes('_L') || meta.id.endsWith('L');
+    // sweep ~270° as experiment ramps; slight extra turn while climbing
+    const climb = simRunning ? simProgress * 0.35 : 0;
+    const target = isLeft
+      ? (pressureGPa / 25) * Math.PI * 1.5 + climb
+      : (Math.max(0, temperatureC - 25) / 2000) * Math.PI * 1.5 + climb * 0.85;
+    pivotRef.current.rotation.y = THREE.MathUtils.damp(
+      pivotRef.current.rotation.y,
+      target,
+      simRunning ? 4.5 : 6,
+      dt,
+    );
+  });
+
   if (hiddenGroups.has(meta.group)) return null;
 
-  // Never explode outer press frame parts (they must stay seated)
   const isPress = meta.group.startsWith('press_');
   const isWc = meta.group === 'wc';
-  const isCell = meta.group.startsWith('cell_');
   const e = isPress ? 0 : layerExplosion(explosion, meta.layer);
   const distMm = e * explodeScale * (1 + meta.layer * 0.25);
   const [tx, ty, tz] = meta.thrust;
-  // FreeCAD +Z press → Three +Y
   const pos = new THREE.Vector3(
     isPress ? 0 : tx * distMm,
     isPress ? 0 : tz * distMm,
     isPress ? 0 : -ty * distMm,
   );
 
-  // WC cubes: no receiveShadow — shadow acne on dark faces looks like mosaic when orbiting
+  if (isGaugeSpin && gaugeCenter) {
+    const gr = Math.max(geometry.boundingSphere?.radius ?? 8, 4);
+    const showNeedle = meta.id.includes('GaugeDial');
+    return (
+      <group position={pos}>
+        <group ref={pivotRef} position={gaugeCenter}>
+          <mesh
+            ref={meshRef}
+            geometry={geometry}
+            material={mat}
+            position={gaugeCenter.clone().negate()}
+            castShadow={false}
+            receiveShadow={false}
+          />
+          {showNeedle && (
+            <mesh position={[gr * 0.28, 0, 0]} castShadow={false}>
+              <boxGeometry args={[gr * 0.72, gr * 0.08, gr * 0.12]} />
+              <meshStandardMaterial color="#1a1a1a" metalness={0.4} roughness={0.35} />
+            </mesh>
+          )}
+          {showNeedle && (
+            <mesh castShadow={false}>
+              <sphereGeometry args={[gr * 0.1, 12, 12]} />
+              <meshStandardMaterial color="#0d0d0d" metalness={0.5} roughness={0.3} />
+            </mesh>
+          )}
+        </group>
+      </group>
+    );
+  }
+
   return (
     <mesh
+      ref={meshRef}
       geometry={geometry}
       material={mat}
       position={pos}

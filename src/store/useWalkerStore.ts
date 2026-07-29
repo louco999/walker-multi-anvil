@@ -3,7 +3,7 @@ import type { FurnaceType, PartId, PhaseState } from '../types/parts';
 
 export type LayerVisibility = Record<PartId, boolean>;
 
-export type ViewMode = 'full' | 'cad' | 'cell' | 'procedural';
+export type ViewMode = 'full' | 'cad' | 'cell';
 
 export type CadGroup =
   | 'press_base'

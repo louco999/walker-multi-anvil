@@ -1,7 +1,7 @@
 import { useWalkerStore, type CadGroup } from '../store/useWalkerStore';
 import { ExplosionSlider } from './ExplosionSlider';
 import { PartCard } from './PartCard';
-import { PART_CATALOG, type FurnaceType, type PartId } from '../types/parts';
+import type { FurnaceType } from '../types/parts';
 
 const FULL_GROUPS: { id: CadGroup; label: string }[] = [
   { id: 'press_base', label: '机座' },
@@ -84,15 +84,6 @@ function phaseClass(phase: string): string {
   return 'phase stable';
 }
 
-const LAYER_ORDER: PartId[] = [
-  'hydraulic-frame',
-  'walker-hatbox',
-  'first-stage',
-  'wc-anvils',
-  'octahedron-cell',
-  'sample-core',
-];
-
 export function Dashboard() {
   const loadTons = useWalkerStore((s) => s.loadTons);
   const pressureGPa = useWalkerStore((s) => s.pressureGPa);
@@ -111,11 +102,6 @@ export function Dashboard() {
   const simProgress = useWalkerStore((s) => s.simProgress);
   const startPhaseTest = useWalkerStore((s) => s.startPhaseTest);
   const resetSimulation = useWalkerStore((s) => s.resetSimulation);
-  const layerVisible = useWalkerStore((s) => s.layerVisible);
-  const setLayerVisible = useWalkerStore((s) => s.setLayerVisible);
-  const showAllLayers = useWalkerStore((s) => s.showAllLayers);
-  const setSelectedPart = useWalkerStore((s) => s.setSelectedPart);
-  const setFocusPart = useWalkerStore((s) => s.setFocusPart);
 
   return (
     <>
@@ -129,9 +115,7 @@ export function Dashboard() {
                 ? '四柱压机 + Walker 模块 + 14/8 cell'
                 : viewMode === 'cell'
                   ? '14/8 Cell 详图 · MgO / ZrO₂ / 炉 / 样品 / TC'
-                  : viewMode === 'cad'
-                    ? 'Walker 模块核心（无外机架）'
-                    : '旧版程序化示意（仅对照）'}
+                  : 'Walker 模块核心（无外机架）'}
             </p>
           </div>
         </div>
@@ -210,22 +194,13 @@ export function Dashboard() {
           >
             14/8 Cell
           </button>
-          <button
-            type="button"
-            className={`btn tiny ${viewMode === 'procedural' ? 'primary' : 'ghost'}`}
-            onClick={() => setViewMode('procedural')}
-          >
-            Old
-          </button>
         </div>
         <p className="panel-hint">
           {viewMode === 'full'
             ? 'Voggenreiter 风格四柱压机 + Walker 工具模块 + 14/8 cell（教学尺度）。'
             : viewMode === 'cell'
-              ? 'Kawai 14/8 腔体：面开孔、角槽热电偶、填满炉孔。'
-              : viewMode === 'cad'
-                ? '仅 Walker 模块：端面环 → hatbox → 6 砧 → 8 WC → cell。'
-                : '旧版程序化（仅对照）'}
+              ? 'Kawai 14/8 腔体：面开孔、角槽热电偶、填满炉孔；升温时中心热色更亮。'
+              : '仅 Walker 模块：端面环 → hatbox → 6 砧 → 8 WC → cell。'}
         </p>
         <ExplosionSlider />
         <label className="cutaway-row">
@@ -269,39 +244,6 @@ export function Dashboard() {
           </div>
         )}
 
-        {viewMode === 'procedural' && (
-          <div className="layer-block">
-            <div className="layer-head">
-              <h3>Layers</h3>
-              <button type="button" className="btn tiny ghost" onClick={showAllLayers}>
-                All
-              </button>
-            </div>
-            {LAYER_ORDER.map((id) => {
-              const info = PART_CATALOG[id];
-              return (
-                <label key={id} className="layer-row">
-                  <input
-                    type="checkbox"
-                    checked={layerVisible[id]}
-                    onChange={(ev) => setLayerVisible(id, ev.target.checked)}
-                  />
-                  <button
-                    type="button"
-                    className="layer-name"
-                    onClick={() => {
-                      setSelectedPart(id);
-                      setFocusPart(id);
-                    }}
-                  >
-                    L{info.layer} {info.nameZh}
-                  </button>
-                </label>
-              );
-            })}
-          </div>
-        )}
-
         <div className="legend">
           {viewMode === 'full' ? (
             <>
@@ -321,6 +263,9 @@ export function Dashboard() {
           ) : viewMode === 'cell' ? (
             <>
               <div>
+                <i style={{ background: '#ff5522' }} /> 中心热区（升温）
+              </div>
+              <div>
                 <i style={{ background: '#8B4A3A' }} /> MgO 八面体
               </div>
               <div>
@@ -330,13 +275,10 @@ export function Dashboard() {
                 <i style={{ background: '#383430' }} /> LaCrO₃ 阶梯炉
               </div>
               <div>
-                <i style={{ background: '#40a658' }} /> 样品（绿）
-              </div>
-              <div>
                 <i style={{ background: '#d9a61f' }} /> 热电偶
               </div>
             </>
-          ) : viewMode === 'cad' ? (
+          ) : (
             <>
               <div>
                 <i style={{ background: '#8a9098' }} /> 端面环 + hatbox + 砧
@@ -348,25 +290,14 @@ export function Dashboard() {
                 <i style={{ background: '#8B4A3A' }} /> 14/8 cell 堆栈
               </div>
             </>
-          ) : (
-            <>
-              <div>
-                <i style={{ background: '#e65c00' }} /> 液压机架
-              </div>
-              <div>
-                <i style={{ background: '#c8d0d8' }} /> 模块 + 一级砧
-              </div>
-            </>
           )}
         </div>
         <p className="panel-hint tip">
           {viewMode === 'full'
-            ? '爆炸看压机→模块→砧→cell · cad/exports/full_apparatus/'
+            ? 'Start 实验时顶梁双表随 P–T 转动 · 爆炸看压机→模块→cell'
             : viewMode === 'cell'
-              ? '爆炸拆层 · cad/exports/cell_14_8/'
-              : viewMode === 'cad'
-                ? '模块核心 · cad/exports/'
-                : '旧版对照'}
+              ? '升温：中心最热、外侧较冷 · 爆炸拆层'
+              : '模块核心 · 半剖看 WC 与 cell'}
         </p>
       </aside>
 
@@ -375,12 +306,10 @@ export function Dashboard() {
       <footer className="hud-footer">
         <span>
           {viewMode === 'full'
-            ? 'Full press · 4-column LP-style + Walker + 14/8'
+            ? 'Full press · LP-style + Walker + 14/8'
             : viewMode === 'cell'
-              ? '14/8 cell · face-bore + TC grooves'
-              : viewMode === 'cad'
-                ? 'Walker module core · FreeCAD'
-                : 'Legacy procedural'}
+              ? '14/8 cell · face-bore + heat map'
+              : 'Walker module · FreeCAD'}
         </span>
         <span>教学示意，非工程图纸</span>
       </footer>
