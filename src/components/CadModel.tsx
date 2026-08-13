@@ -106,8 +106,18 @@ function applyHeaterStackGradientColors(
   colors.needsUpdate = true;
 }
 
+/**
+ * World-space cut plane for 半剖. Normal -X keeps the +X half (camera-friendly).
+ * Shared instance — Three.js reads plane state each frame.
+ */
+const CUTAWAY_PLANE = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.015);
+
 /** Per-group / per-id PBR so press orange / white / SS / gray read correctly on web. */
-function materialForCadPart(meta: CadPartMeta, transparentShell?: boolean): THREE.MeshStandardMaterial {
+function materialForCadPart(
+  meta: CadPartMeta,
+  transparentShell?: boolean,
+  cutaway?: boolean,
+): THREE.MeshStandardMaterial {
   const [r, g, b] = meta.color;
   const color = new THREE.Color(r, g, b);
   const id = meta.id;
@@ -147,79 +157,97 @@ function materialForCadPart(meta: CadPartMeta, transparentShell?: boolean): THRE
     metalness = 0.12;
     roughness = 0.62;
   } else if (group === 'first_stage') {
-    metalness = 0.72;
-    roughness = 0.36;
+    // Satin tool steel — not mirror polish
+    metalness = 0.55;
+    roughness = 0.42;
   } else if (group === 'hatbox' || group === 'end_ring') {
-    metalness = 0.88;
-    roughness = 0.24;
+    // Brushed stainless module
+    metalness = 0.62;
+    roughness = 0.38;
   } else if (group === 'press_ram') {
-    // RAL orange paint — not chrome
-    metalness = 0.12;
-    roughness = 0.48;
-    emissive = color.clone().multiplyScalar(0.12);
-    emissiveIntensity = 0.18;
+    // RAL orange paint — matte industrial, tiny self-illum only
+    metalness = 0.08;
+    roughness = 0.58;
+    emissive = color.clone().multiplyScalar(0.04);
+    emissiveIntensity = 0.06;
   } else if (group === 'press_base') {
     // machine pedestal gray paint
-    metalness = 0.18;
-    roughness = 0.62;
+    metalness = 0.12;
+    roughness = 0.72;
   } else if (group === 'press_table' || group === 'press_platen') {
-    // stainless work surfaces / tooling
-    metalness = 0.88;
-    roughness = 0.2;
+    // Satin stainless — was too mirror-like (0.88 / 0.2)
+    metalness = 0.55;
+    roughness = 0.42;
   } else if (group === 'press_cabinet') {
     if (id.includes('EStop')) {
-      metalness = 0.15;
-      roughness = 0.45;
-      emissive = new THREE.Color('#400000');
-      emissiveIntensity = 0.15;
-    } else if (id.includes('Screen') || id.includes('Button')) {
-      metalness = 0.08;
+      metalness = 0.1;
       roughness = 0.55;
+      emissive = new THREE.Color('#300000');
+      emissiveIntensity = 0.08;
+    } else if (id.includes('Screen') || id.includes('Button')) {
+      metalness = 0.05;
+      roughness = 0.62;
     } else {
-      metalness = 0.28;
-      roughness = 0.52;
+      metalness = 0.18;
+      roughness = 0.62;
     }
   } else if (group === 'press_frame') {
     if (id.includes('Chrome') || id.includes('Handle')) {
-      metalness = 0.95;
-      roughness = 0.12;
+      // Soft chrome, not showroom mirror
+      metalness = 0.72;
+      roughness = 0.28;
     } else if (id.includes('Column') && !id.includes('Nut')) {
-      // white column paint
-      metalness = 0.22;
-      roughness = 0.4;
+      // white column paint — matte
+      metalness = 0.1;
+      roughness = 0.55;
     } else if (id.includes('GaugeDial')) {
-      metalness = 0.05;
-      roughness = 0.35;
-    } else if (id.includes('Gauge') || id.includes('Brand') || id.includes('Hub')) {
-      metalness = 0.35;
+      metalness = 0.04;
       roughness = 0.45;
+    } else if (id.includes('Gauge') || id.includes('Brand') || id.includes('Hub')) {
+      metalness = 0.22;
+      roughness = 0.55;
     } else if (id.includes('Crown') || id.includes('HeadFront') || id.includes('TopCrossHead')) {
       // gray painted head
+      metalness = 0.16;
+      roughness = 0.58;
+    } else {
       metalness = 0.28;
       roughness = 0.48;
-    } else {
-      metalness = 0.55;
-      roughness = 0.35;
     }
+  } else if (group === 'press_props') {
+    metalness = 0.25;
+    roughness = 0.55;
   } else if (group.startsWith('press_')) {
-    metalness = 0.4;
-    roughness = 0.4;
+    metalness = 0.22;
+    roughness = 0.52;
   } else if (group.startsWith('cell_')) {
-    metalness = 0.35;
-    roughness = 0.45;
+    metalness = 0.28;
+    roughness = 0.5;
   }
 
-  // chrome tooling override by name
+  // chrome tooling override by name — soft polish only
   if (id.includes('UpperChrome') || id.includes('ChromeBar')) {
-    metalness = 0.95;
-    roughness = 0.12;
+    metalness = 0.7;
+    roughness = 0.28;
   }
 
-  const isTransparent = Boolean(transparentShell && isMgo) || isCapsule;
-  // DoubleSide + coplanar WC faces → z-fight flicker when rotating / cutaway
-  const side = isTransparent || isMgo ? THREE.DoubleSide : THREE.FrontSide;
-  // Slight depth bias on tightly packed anvils (8 WC faces touch)
-  const needBias = group === 'wc' || group === 'first_stage';
+  const isShellGlass = Boolean(transparentShell && isMgo);
+  const isTransparent = isShellGlass || isCapsule;
+  // Clip + FrontSide leaves reverse faces undrawn → hollow “transparent holes”.
+  // DoubleSide during cutaway shows inner walls of shells / cut solids.
+  // Intact view: FrontSide on WC/first-stage avoids coplanar z-fight flicker.
+  const side =
+    cutaway || isTransparent || isMgo ? THREE.DoubleSide : THREE.FrontSide;
+
+  // Semi-transparent shells without depthWrite punch holes through internals when clipped.
+  let opacity = 1;
+  if (isShellGlass) opacity = cutaway ? 0.58 : 0.38;
+  else if (isCapsule) opacity = cutaway ? 0.9 : 0.75;
+  const depthWrite = isShellGlass ? Boolean(cutaway) : true;
+
+  // Slight depth bias on tightly packed anvils; stronger when DoubleSide cutaway
+  const needBias = group === 'wc' || group === 'first_stage' || Boolean(cutaway);
+  const biasFactor = group === 'wc' && cutaway ? 2 : needBias ? 1 : 0;
 
   return new THREE.MeshStandardMaterial({
     color,
@@ -229,13 +257,22 @@ function materialForCadPart(meta: CadPartMeta, transparentShell?: boolean): THRE
     emissive,
     emissiveIntensity,
     transparent: isTransparent,
-    opacity: transparentShell && isMgo ? 0.38 : isCapsule ? 0.75 : 1,
-    depthWrite: !(transparentShell && isMgo),
-    envMapIntensity: group === 'wc' ? 0.55 : 1.0,
+    opacity,
+    depthWrite,
+    // Full press has large painted + satin surfaces — keep env soft to avoid glitter
+    envMapIntensity: group === 'wc'
+      ? 0.4
+      : group.startsWith('press_')
+        ? 0.45
+        : group === 'hatbox' || group === 'end_ring' || group === 'first_stage'
+          ? 0.55
+          : 0.7,
     flatShading: false,
     polygonOffset: needBias,
-    polygonOffsetFactor: needBias ? 1 : 0,
+    polygonOffsetFactor: biasFactor,
     polygonOffsetUnits: needBias ? 1 : 0,
+    clippingPlanes: cutaway ? [CUTAWAY_PLANE] : [],
+    clipShadows: false,
   });
 }
 
@@ -295,7 +332,7 @@ function PartMesh({
   }, [geometry, isGaugeSpin]);
 
   const mat = useMemo(() => {
-    const m = materialForCadPart(meta, transparentShell);
+    const m = materialForCadPart(meta, transparentShell, cutaway);
     if (isHeaterStack) {
       // CRITICAL: vertexColors multiply material.color — must be white or map is invisible
       m.color.set(0xffffff);
@@ -308,20 +345,31 @@ function PartMesh({
       m.toneMapped = false;
     }
     return m;
-  }, [meta.color, meta.group, meta.id, transparentShell, isHeaterStack]);
+  }, [meta.color, meta.group, meta.id, transparentShell, isHeaterStack, cutaway]);
 
-  const clipPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0.015), []);
-
-  useEffect(() => {
-    if (cutaway) {
-      mat.clippingPlanes = [clipPlane];
-      mat.clipShadows = false;
-    } else {
-      mat.clippingPlanes = [];
-      mat.clipShadows = false;
-    }
-    mat.needsUpdate = true;
-  }, [mat, cutaway, clipPlane]);
+  // Needle / hub extras must clip with the same plane or they "float" into the cut void
+  const needleMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#1a1a1a',
+        metalness: 0.4,
+        roughness: 0.35,
+        side: cutaway ? THREE.DoubleSide : THREE.FrontSide,
+        clippingPlanes: cutaway ? [CUTAWAY_PLANE] : [],
+      }),
+    [cutaway],
+  );
+  const hubMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#0d0d0d',
+        metalness: 0.5,
+        roughness: 0.3,
+        side: cutaway ? THREE.DoubleSide : THREE.FrontSide,
+        clippingPlanes: cutaway ? [CUTAWAY_PLANE] : [],
+      }),
+    [cutaway],
+  );
 
   // Heater stack: strong false-color axial map (mid white-hot, ends blue-cold)
   useEffect(() => {
@@ -331,9 +379,9 @@ function PartMesh({
     const tNorm = Math.min(1, Math.max(0, (temperatureC - 25) / 2000));
     mat.color.set(0xffffff);
     mat.vertexColors = true;
-    // mild global glow so heat still reads under dark studio lighting
-    mat.emissive.setRGB(0.55, 0.22, 0.04);
-    mat.emissiveIntensity = tNorm * 0.65;
+    // mild global glow — keep restrained so bloom doesn't wash out the cell
+    mat.emissive.setRGB(0.45, 0.18, 0.04);
+    mat.emissiveIntensity = Math.min(0.4, tNorm * 0.38);
     mat.needsUpdate = true;
   }, [isHeaterStack, geometry, temperatureC, meta.color, mat]);
 
@@ -382,15 +430,13 @@ function PartMesh({
             receiveShadow={false}
           />
           {showNeedle && (
-            <mesh position={[gr * 0.28, 0, 0]} castShadow={false}>
+            <mesh position={[gr * 0.28, 0, 0]} castShadow={false} material={needleMat}>
               <boxGeometry args={[gr * 0.72, gr * 0.08, gr * 0.12]} />
-              <meshStandardMaterial color="#1a1a1a" metalness={0.4} roughness={0.35} />
             </mesh>
           )}
           {showNeedle && (
-            <mesh castShadow={false}>
+            <mesh castShadow={false} material={hubMat}>
               <sphereGeometry args={[gr * 0.1, 12, 12]} />
-              <meshStandardMaterial color="#0d0d0d" metalness={0.5} roughness={0.3} />
             </mesh>
           )}
         </group>
@@ -492,15 +538,8 @@ export function FullPressModel() {
   }
   if (!manifest) return null;
 
-  return (
-    <group>
-      <CadAssembly manifest={manifest} explodeScale={80} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.35, 0]} receiveShadow>
-        <circleGeometry args={[2.8, 64]} />
-        <meshStandardMaterial color="#2a2e34" metalness={0.12} roughness={0.88} />
-      </mesh>
-    </group>
-  );
+  // Floor lives only in Studio — avoid a second black disc blocking the press when orbiting.
+  return <CadAssembly manifest={manifest} explodeScale={80} />;
 }
 
 /** Walker module CAD (hatbox + anvils + cell), no outer press. */
@@ -513,15 +552,7 @@ export function CadModel() {
   }
   if (!manifest) return null;
 
-  return (
-    <group>
-      <CadAssembly manifest={manifest} explodeScale={32} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.15, 0]} receiveShadow>
-        <circleGeometry args={[2.4, 48]} />
-        <meshStandardMaterial color="#2a2e34" metalness={0.1} roughness={0.9} />
-      </mesh>
-    </group>
-  );
+  return <CadAssembly manifest={manifest} explodeScale={32} />;
 }
 
 /** Isolated 14/8 cell — grooves / TC / sample visible. */
@@ -534,15 +565,7 @@ export function CellModel() {
   }
   if (!manifest) return null;
 
-  return (
-    <group>
-      <CadAssembly manifest={manifest} explodeScale={5} transparentShell />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.55, 0]} receiveShadow>
-        <circleGeometry args={[0.95, 48]} />
-        <meshStandardMaterial color="#1e2228" metalness={0.1} roughness={0.9} />
-      </mesh>
-    </group>
-  );
+  return <CadAssembly manifest={manifest} explodeScale={5} transparentShell />;
 }
 
 function CadSingleStlFallback({ url, scale }: { url: string; scale: number }) {

@@ -1,15 +1,15 @@
 {
   "units": "mm",
   "scale_to_scene": 0.0018,
-  "version": "1785288784",
+  "version": "1786630292",
   "press_axis": [
     0,
     0,
     1
   ],
   "cell": "full apparatus: continuous load path, no floating parts",
-  "module_bottom_z": 28.67681599496703,
-  "module_center_z": 92.67681599496703,
+  "module_bottom_z": 22.304190218307692,
+  "module_center_z": 86.3041902183077,
   "parameters": {
     "r_outer": 79.65782220824175,
     "hatbox_h": 100.0,
@@ -29,13 +29,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Pedestal.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Pedestal.stl?v=1786630292",
       "color": [
         0.42,
         0.44,
         0.46
       ],
-      "volume_mm3": 23599667.431802627
+      "volume_mm3": 6426711.556880312
     },
     {
       "id": "Press_PedestalFoot",
@@ -46,13 +46,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_PedestalFoot.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_PedestalFoot.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 3592888.4698638846
+      "volume_mm3": 1135112.0330689934
     },
     {
       "id": "Press_WorkTable",
@@ -63,13 +63,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_WorkTable.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_WorkTable.stl?v=1786630292",
       "color": [
         0.84,
         0.87,
         0.9
       ],
-      "volume_mm3": 7274231.595934331
+      "volume_mm3": 2751310.329460854
     },
     {
       "id": "Press_TableLip",
@@ -80,13 +80,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_TableLip.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_TableLip.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 1494247.8004482808
+      "volume_mm3": 815008.9646141888
     },
     {
       "id": "Press_Port_m0p34_m0p22",
@@ -97,13 +97,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_m0p34_m0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_m0p34_m0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 1369.44283239929
+      "volume_mm3": 1369.4428323992902
     },
     {
       "id": "Press_Port_m0p34_0p22",
@@ -114,7 +114,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_m0p34_0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_m0p34_0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
@@ -131,13 +131,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_m0p12_m0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_m0p12_m0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 1369.44283239929
+      "volume_mm3": 1369.4428323992902
     },
     {
       "id": "Press_Port_m0p12_0p22",
@@ -148,13 +148,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_m0p12_0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_m0p12_0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 1369.44283239929
+      "volume_mm3": 1369.4428323992902
     },
     {
       "id": "Press_Port_0p12_m0p22",
@@ -165,7 +165,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_0p12_m0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_0p12_m0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
@@ -182,7 +182,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_0p12_0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_0p12_0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
@@ -199,7 +199,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_0p34_m0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_0p34_m0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
@@ -216,7 +216,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Port_0p34_0p22.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Port_0p34_0p22.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
@@ -233,13 +233,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Column_0.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Column_0.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 2416066.9035141636
+      "volume_mm3": 667579.6224105175
     },
     {
       "id": "Press_ColumnNut_0",
@@ -250,13 +250,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ColumnNut_0.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ColumnNut_0.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 42079.24339554177
+      "volume_mm3": 11344.588918398656
     },
     {
       "id": "Press_ChromeBar_0",
@@ -267,13 +267,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ChromeBar_0.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ChromeBar_0.stl?v=1786630292",
       "color": [
         0.8,
         0.83,
         0.87
       ],
-      "volume_mm3": 24772.54870064698
+      "volume_mm3": 25388.904685057772
     },
     {
       "id": "Press_Handle_0",
@@ -284,13 +284,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Handle_0.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Handle_0.stl?v=1786630292",
       "color": [
         0.5,
         0.54,
         0.58
       ],
-      "volume_mm3": 5935.3235147778
+      "volume_mm3": 5935.323514777798
     },
     {
       "id": "Press_Column_1",
@@ -301,13 +301,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Column_1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Column_1.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 2416066.9035141626
+      "volume_mm3": 667579.6224105175
     },
     {
       "id": "Press_ColumnNut_1",
@@ -318,13 +318,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ColumnNut_1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ColumnNut_1.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 42079.24339554178
+      "volume_mm3": 11344.588918398656
     },
     {
       "id": "Press_ChromeBar_1",
@@ -335,13 +335,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ChromeBar_1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ChromeBar_1.stl?v=1786630292",
       "color": [
         0.8,
         0.83,
         0.87
       ],
-      "volume_mm3": 24772.54870064698
+      "volume_mm3": 25388.904685057772
     },
     {
       "id": "Press_Handle_1",
@@ -352,13 +352,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Handle_1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Handle_1.stl?v=1786630292",
       "color": [
         0.5,
         0.54,
         0.58
       ],
-      "volume_mm3": 5935.3235147778
+      "volume_mm3": 5935.323514777798
     },
     {
       "id": "Press_Column_2",
@@ -369,13 +369,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Column_2.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Column_2.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 2416066.9035141626
+      "volume_mm3": 667579.6224105175
     },
     {
       "id": "Press_ColumnNut_2",
@@ -386,13 +386,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ColumnNut_2.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ColumnNut_2.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 42079.24339554177
+      "volume_mm3": 11344.588918398656
     },
     {
       "id": "Press_Column_3",
@@ -403,13 +403,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Column_3.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Column_3.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 2416066.9035141626
+      "volume_mm3": 667579.6224105175
     },
     {
       "id": "Press_ColumnNut_3",
@@ -420,13 +420,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_ColumnNut_3.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_ColumnNut_3.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 42079.24339554177
+      "volume_mm3": 11344.588918398656
     },
     {
       "id": "Press_TopCrossHead",
@@ -437,13 +437,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_TopCrossHead.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_TopCrossHead.stl?v=1786630292",
       "color": [
         0.78,
         0.8,
         0.82
       ],
-      "volume_mm3": 8104889.985263731
+      "volume_mm3": 3182931.202922922
     },
     {
       "id": "Press_HeadBoss",
@@ -454,13 +454,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadBoss.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadBoss.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 487176.11173821724
+      "volume_mm3": 245859.45084529574
     },
     {
       "id": "Press_HeadRib_Xm1",
@@ -471,13 +471,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadRib_Xm1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadRib_Xm1.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 174802.82770458172
+      "volume_mm3": 104345.99175436712
     },
     {
       "id": "Press_HeadRib_X1",
@@ -488,13 +488,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadRib_X1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadRib_X1.stl?v=1786630292",
       "color": [
         0.28,
         0.3,
         0.32
       ],
-      "volume_mm3": 174802.82770458187
+      "volume_mm3": 104345.99175436712
     },
     {
       "id": "Press_HeadCrown",
@@ -505,13 +505,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadCrown.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadCrown.stl?v=1786630292",
       "color": [
         0.9,
         0.91,
         0.92
       ],
-      "volume_mm3": 5144242.900991449
+      "volume_mm3": 1893590.0621113093
     },
     {
       "id": "Press_HeadCrownCap",
@@ -522,13 +522,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadCrownCap.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadCrownCap.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 677276.3225076733
+      "volume_mm3": 349026.52024835575
     },
     {
       "id": "Press_HeadFront",
@@ -539,13 +539,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_HeadFront.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_HeadFront.stl?v=1786630292",
       "color": [
         0.9,
         0.91,
         0.92
       ],
-      "volume_mm3": 107079.63935084864
+      "volume_mm3": 57882.134644785736
     },
     {
       "id": "Press_BrandPlate",
@@ -556,13 +556,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_BrandPlate.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_BrandPlate.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 7453.285125311958
+      "volume_mm3": 7453.285125311941
     },
     {
       "id": "Press_Gauge_L",
@@ -573,13 +573,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Gauge_L.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Gauge_L.stl?v=1786630292",
       "color": [
         0.55,
         0.58,
         0.6
       ],
-      "volume_mm3": 7685.648549179681
+      "volume_mm3": 7685.648549179687
     },
     {
       "id": "Press_GaugeDial_L",
@@ -590,13 +590,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_GaugeDial_L.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_GaugeDial_L.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 1240.2792202724193
+      "volume_mm3": 1240.2792202724222
     },
     {
       "id": "Press_GaugeHub_L",
@@ -607,13 +607,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_GaugeHub_L.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_GaugeHub_L.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 35.41546851462001
+      "volume_mm3": 35.415468514619945
     },
     {
       "id": "Press_Gauge_R",
@@ -624,13 +624,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Gauge_R.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Gauge_R.stl?v=1786630292",
       "color": [
         0.55,
         0.58,
         0.6
       ],
-      "volume_mm3": 7685.648549179681
+      "volume_mm3": 7685.648549179687
     },
     {
       "id": "Press_GaugeDial_R",
@@ -641,13 +641,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_GaugeDial_R.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_GaugeDial_R.stl?v=1786630292",
       "color": [
         0.96,
         0.97,
         0.98
       ],
-      "volume_mm3": 1240.2792202724193
+      "volume_mm3": 1240.2792202724222
     },
     {
       "id": "Press_GaugeHub_R",
@@ -658,13 +658,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_GaugeHub_R.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_GaugeHub_R.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 35.41546851462001
+      "volume_mm3": 35.415468514619945
     },
     {
       "id": "Press_UpperInner",
@@ -675,13 +675,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_UpperInner.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_UpperInner.stl?v=1786630292",
       "color": [
         0.84,
         0.87,
         0.9
       ],
-      "volume_mm3": 526841.6803827768
+      "volume_mm3": 358545.0324827231
     },
     {
       "id": "Press_UpperChrome",
@@ -692,13 +692,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_UpperChrome.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_UpperChrome.stl?v=1786630292",
       "color": [
         0.8,
         0.83,
         0.87
       ],
-      "volume_mm3": 650421.827633058
+      "volume_mm3": 592696.8904306238
     },
     {
       "id": "Press_UpperPlate",
@@ -709,13 +709,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_UpperPlate.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_UpperPlate.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 461138.91295078135
+      "volume_mm3": 321958.80467836367
     },
     {
       "id": "Press_RamBody",
@@ -726,13 +726,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_RamBody.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_RamBody.stl?v=1786630292",
       "color": [
         0.93,
         0.4,
         0.05
       ],
-      "volume_mm3": 2107366.721531107
+      "volume_mm3": 1742673.1702090402
     },
     {
       "id": "Press_RamBand",
@@ -743,13 +743,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_RamBand.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_RamBand.stl?v=1786630292",
       "color": [
         0.74,
         0.3,
         0.03
       ],
-      "volume_mm3": 369008.6936347699
+      "volume_mm3": 234249.42122204567
     },
     {
       "id": "Press_RamTop",
@@ -760,13 +760,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_RamTop.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_RamTop.stl?v=1786630292",
       "color": [
         0.74,
         0.3,
         0.03
       ],
-      "volume_mm3": 148639.5994253274
+      "volume_mm3": 93157.80450094305
     },
     {
       "id": "Press_RamFlange",
@@ -777,13 +777,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_RamFlange.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_RamFlange.stl?v=1786630292",
       "color": [
         0.74,
         0.3,
         0.03
       ],
-      "volume_mm3": 285474.205284572
+      "volume_mm3": 187910.93113961315
     },
     {
       "id": "Press_RamPlate",
@@ -794,7 +794,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_RamPlate.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_RamPlate.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
@@ -811,13 +811,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_LowerPlaten.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_LowerPlaten.stl?v=1786630292",
       "color": [
         0.68,
         0.72,
         0.76
       ],
-      "volume_mm3": 740139.3884821929
+      "volume_mm3": 418800.5171082919
     },
     {
       "id": "Press_LowerSeat",
@@ -828,13 +828,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_LowerSeat.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_LowerSeat.stl?v=1786630292",
       "color": [
         0.84,
         0.87,
         0.9
       ],
-      "volume_mm3": 207512.51082785157
+      "volume_mm3": 161398.61953277345
     },
     {
       "id": "Press_Cabinet",
@@ -845,13 +845,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Cabinet.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Cabinet.stl?v=1786630292",
       "color": [
         0.88,
         0.9,
         0.92
       ],
-      "volume_mm3": 11733445.94365458
+      "volume_mm3": 5894462.473368479
     },
     {
       "id": "Press_CabinetPanel",
@@ -862,13 +862,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_CabinetPanel.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_CabinetPanel.stl?v=1786630292",
       "color": [
         0.84,
         0.87,
         0.9
       ],
-      "volume_mm3": 324165.7675095461
+      "volume_mm3": 205828.85428000704
     },
     {
       "id": "Press_CabinetScreen",
@@ -879,13 +879,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_CabinetScreen.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_CabinetScreen.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 5337.639087137456
+      "volume_mm3": 5337.639087137455
     },
     {
       "id": "Press_EStop",
@@ -896,13 +896,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_EStop.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_EStop.stl?v=1786630292",
       "color": [
         0.82,
         0.05,
         0.05
       ],
-      "volume_mm3": 4830.525389794339
+      "volume_mm3": 4830.5253897943385
     },
     {
       "id": "Press_Button_0",
@@ -913,7 +913,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Button_0.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Button_0.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
@@ -930,13 +930,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Button_1.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Button_1.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 946.2178381743665
+      "volume_mm3": 946.2178381743664
     },
     {
       "id": "Press_Button_2",
@@ -947,13 +947,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Button_2.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Button_2.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 946.2178381743676
+      "volume_mm3": 946.2178381743665
     },
     {
       "id": "Press_Button_3",
@@ -964,13 +964,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Button_3.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Button_3.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 946.2178381743659
+      "volume_mm3": 946.2178381743664
     },
     {
       "id": "Press_Button_4",
@@ -981,13 +981,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Press_Button_4.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Press_Button_4.stl?v=1786630292",
       "color": [
         0.06,
         0.06,
         0.06
       ],
-      "volume_mm3": 946.2178381743657
+      "volume_mm3": 946.2178381743665
     },
     {
       "id": "WC_mmm",
@@ -998,7 +998,7 @@
         0.0,
         -1.0
       ],
-      "stl": "full_apparatus/parts_stl/WC_mmm.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_mmm.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1015,7 +1015,7 @@
         -0.6666666666666666,
         -0.3333333333333333
       ],
-      "stl": "full_apparatus/parts_stl/WC_mmp.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_mmp.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1032,7 +1032,7 @@
         0.9106836025229591,
         -0.33333333333333337
       ],
-      "stl": "full_apparatus/parts_stl/WC_mpm.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_mpm.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1049,7 +1049,7 @@
         0.24401693585629247,
         0.3333333333333333
       ],
-      "stl": "full_apparatus/parts_stl/WC_mpp.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_mpp.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1066,7 +1066,7 @@
         -0.24401693585629247,
         -0.3333333333333333
       ],
-      "stl": "full_apparatus/parts_stl/WC_pmm.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_pmm.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1083,7 +1083,7 @@
         -0.9106836025229591,
         0.33333333333333337
       ],
-      "stl": "full_apparatus/parts_stl/WC_pmp.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_pmp.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1100,7 +1100,7 @@
         0.6666666666666666,
         0.3333333333333333
       ],
-      "stl": "full_apparatus/parts_stl/WC_ppm.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_ppm.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1117,7 +1117,7 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/WC_ppp.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/WC_ppp.stl?v=1786630292",
       "color": [
         0.12,
         0.12,
@@ -1134,13 +1134,13 @@
         -0.21132486540518716,
         0.5773502691896258
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_pX.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_pX.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.0145670234
+      "volume_mm3": 178852.1482472156
     },
     {
       "id": "FirstStage_mX",
@@ -1151,13 +1151,13 @@
         0.21132486540518716,
         -0.5773502691896258
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_mX.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_mX.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.01494707103
+      "volume_mm3": 178852.1641510482
     },
     {
       "id": "FirstStage_pY",
@@ -1168,13 +1168,13 @@
         0.7886751345948129,
         0.5773502691896257
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_pY.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_pY.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.01503050867
+      "volume_mm3": 178852.1713001339
     },
     {
       "id": "FirstStage_mY",
@@ -1185,13 +1185,13 @@
         -0.7886751345948129,
         -0.5773502691896257
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_mY.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_mY.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.01399171069
+      "volume_mm3": 178852.17807382692
     },
     {
       "id": "FirstStage_pZ",
@@ -1202,13 +1202,13 @@
         -0.5773502691896258,
         0.5773502691896258
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_pZ.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_pZ.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.01133867016
+      "volume_mm3": 178852.1608101555
     },
     {
       "id": "FirstStage_mZ",
@@ -1219,13 +1219,13 @@
         0.5773502691896258,
         -0.5773502691896258
       ],
-      "stl": "full_apparatus/parts_stl/FirstStage_mZ.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/FirstStage_mZ.stl?v=1786630292",
       "color": [
         0.78,
         0.82,
         0.86
       ],
-      "volume_mm3": 101009.01523305492
+      "volume_mm3": 178852.17476490125
     },
     {
       "id": "Hatbox",
@@ -1236,7 +1236,7 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/Hatbox.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Hatbox.stl?v=1786630292",
       "color": [
         0.72,
         0.76,
@@ -1253,7 +1253,7 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/EndRing_Top.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/EndRing_Top.stl?v=1786630292",
       "color": [
         0.55,
         0.58,
@@ -1270,7 +1270,7 @@
         0.0,
         -1.0
       ],
-      "stl": "full_apparatus/parts_stl/EndRing_Bottom.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/EndRing_Bottom.stl?v=1786630292",
       "color": [
         0.55,
         0.58,
@@ -1287,13 +1287,13 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_MgO_Octahedron.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_MgO_Octahedron.stl?v=1786630292",
       "color": [
         0.55,
         0.3,
         0.22
       ],
-      "volume_mm3": 175.93438533610262
+      "volume_mm3": 175.93438533610257
     },
     {
       "id": "Cell_ZrO2_Sleeve",
@@ -1304,7 +1304,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Sleeve.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Sleeve.stl?v=1786630292",
       "color": [
         0.92,
         0.9,
@@ -1321,7 +1321,7 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Disk_Top.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Disk_Top.stl?v=1786630292",
       "color": [
         0.9,
         0.88,
@@ -1338,7 +1338,7 @@
         0.0,
         -1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Disk_Bottom.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_ZrO2_Disk_Bottom.stl?v=1786630292",
       "color": [
         0.9,
         0.88,
@@ -1355,7 +1355,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Furnace_LaCrO3.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Furnace_LaCrO3.stl?v=1786630292",
       "color": [
         0.22,
         0.2,
@@ -1372,7 +1372,7 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Spacer_Top.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Spacer_Top.stl?v=1786630292",
       "color": [
         0.78,
         0.72,
@@ -1389,7 +1389,7 @@
         0.0,
         -1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Spacer_Bottom.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Spacer_Bottom.stl?v=1786630292",
       "color": [
         0.78,
         0.72,
@@ -1406,7 +1406,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Capsule.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Capsule.stl?v=1786630292",
       "color": [
         0.72,
         0.74,
@@ -1423,7 +1423,7 @@
         0.0,
         0.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Sample.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Sample.stl?v=1786630292",
       "color": [
         0.25,
         0.65,
@@ -1440,13 +1440,13 @@
         0.0,
         1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Electrode_Top.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Electrode_Top.stl?v=1786630292",
       "color": [
         0.55,
         0.5,
         0.35
       ],
-      "volume_mm3": 1.8046626608602607
+      "volume_mm3": 1.8046626608602603
     },
     {
       "id": "Cell_Electrode_Bottom",
@@ -1457,7 +1457,7 @@
         0.0,
         -1.0
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Electrode_Bottom.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Electrode_Bottom.stl?v=1786630292",
       "color": [
         0.55,
         0.5,
@@ -1474,7 +1474,7 @@
         0.6035949631853322,
         0.5270462766947299
       ],
-      "stl": "full_apparatus/parts_stl/Cell_Thermocouple.stl?v=1785288784",
+      "stl": "full_apparatus/parts_stl/Cell_Thermocouple.stl?v=1786630292",
       "color": [
         0.92,
         0.72,

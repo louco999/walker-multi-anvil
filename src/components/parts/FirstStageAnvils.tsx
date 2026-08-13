@@ -8,7 +8,8 @@ import { layerExplosion, useWalkerStore } from '../../store/useWalkerStore';
 
 /**
  * Six first-stage steel anvils: 3 upper + 3 lower.
- * Each presses one face of the WC cube package; outer arc fits hatbox ID.
+ * Outer faces are cylindrical sectors that tile the hatbox ID wall;
+ * side faces meet neighbors (cube-face Voronoi) with only a thin kerf.
  */
 export function FirstStageAnvils() {
   const explosion = useWalkerStore((s) => s.explosion);
@@ -17,9 +18,12 @@ export function FirstStageAnvils() {
   const e = layerExplosion(explosion, 2);
 
   const depth = SCALE.firstStageDepth;
-  const padHalf = SCALE.firstStagePad / 2;
-  const halfH = SCALE.firstStageHalfH;
-  const halfArc = (56 * Math.PI) / 180 / 2;
+  // Pad half-width ≈ package face half-edge so pads seat on WC faces
+  const padHalf = SCALE.largeCubeHalf * 0.98;
+  // Tall enough to read as filling the module bore (3+3 nest)
+  const halfH = SCALE.hatboxH * 0.42;
+  // ~36° half-arc → ~72° full; six wedges + kerf fill the bore
+  const halfArc = (72 * Math.PI) / 180 / 2;
 
   const geo = useMemo(
     () =>
@@ -29,24 +33,27 @@ export function FirstStageAnvils() {
         outerR: SCALE.hatboxInnerR,
         halfH,
         halfArc,
-        segments: 22,
+        segments: 32,
+        kerf: 0.01,
       }),
     [padHalf, depth, halfH, halfArc],
   );
 
   const bodyMat = useMemo(
-    () => steelMaterial({ color: '#c4ccd4', metalness: 0.94, roughness: 0.14 }),
-    [],
-  );
-  const faceMat = useMemo(
-    () => steelMaterial({ color: '#dce3ea', metalness: 0.9, roughness: 0.12 }),
+    () =>
+      steelMaterial({
+        color: '#c4ccd4',
+        metalness: 0.88,
+        roughness: 0.22,
+        side: THREE.DoubleSide,
+      }),
     [],
   );
 
   const specs = useMemo(() => getFirstStageSpecs(), []);
   const y0 = SCALE.hatboxY;
 
-  // Closed: pad sits on cube face → anvil local origin (pad plane) at largeCubeHalf along normal
+  // Closed: pad plane at largeCubeHalf along face normal
   const closedOffset = SCALE.largeCubeHalf;
 
   if (!visible) return null;
@@ -67,19 +74,9 @@ export function FirstStageAnvils() {
         const pos = spec.normal.clone().multiplyScalar(dist);
         pos.y += y0;
 
-        // Bright machined pad slightly proud of inner face
-        const padPos = spec.normal.clone().multiplyScalar(closedOffset - 0.012 + e * 1.55);
-        padPos.y += y0;
-        const padSize = SCALE.largeCubeHalf * 1.72;
-
         return (
-          <group key={spec.index}>
-            <group position={pos.toArray()} quaternion={q}>
-              <mesh geometry={geo} material={bodyMat} castShadow receiveShadow />
-            </group>
-            <mesh position={padPos.toArray()} quaternion={q} material={faceMat} castShadow>
-              <boxGeometry args={[padSize, padSize, 0.022]} />
-            </mesh>
+          <group key={spec.index} position={pos.toArray()} quaternion={q}>
+            <mesh geometry={geo} material={bodyMat} castShadow receiveShadow />
           </group>
         );
       })}

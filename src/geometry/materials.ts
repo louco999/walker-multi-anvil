@@ -52,8 +52,9 @@ export function steelMaterial(opts?: {
 }): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({
     color: opts?.color ?? COLORS.stainless,
-    metalness: opts?.metalness ?? 0.85,
-    roughness: opts?.roughness ?? 0.35,
+    metalness: opts?.metalness ?? 0.88,
+    roughness: opts?.roughness ?? 0.32,
+    envMapIntensity: 1.25,
     side: opts?.side ?? THREE.FrontSide,
   });
 }
@@ -62,8 +63,9 @@ export function steelMaterial(opts?: {
 export function paintMaterial(color: string, roughness = 0.55): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({
     color,
-    metalness: 0.25,
+    metalness: 0.22,
     roughness,
+    envMapIntensity: 0.85,
   });
 }
 
@@ -71,8 +73,9 @@ export function wcMaterial(): THREE.MeshStandardMaterial {
   // Matte WC-Co — avoid high metalness (facet shimmer / mosaic when orbiting)
   return new THREE.MeshStandardMaterial({
     color: COLORS.wcCube,
-    metalness: 0.12,
-    roughness: 0.62,
+    metalness: 0.14,
+    roughness: 0.58,
+    envMapIntensity: 0.75,
     polygonOffset: true,
     polygonOffsetFactor: 1,
     polygonOffsetUnits: 1,
@@ -82,8 +85,9 @@ export function wcMaterial(): THREE.MeshStandardMaterial {
 export function ceramicMaterial(color: string = COLORS.mgo): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({
     color,
-    metalness: 0.05,
-    roughness: 0.75,
+    metalness: 0.04,
+    roughness: 0.72,
+    envMapIntensity: 0.55,
   });
 }
 

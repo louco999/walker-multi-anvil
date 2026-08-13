@@ -197,9 +197,11 @@ def main():
         except Exception as ex:
             print("STEP", safe, ex)
 
-        # coarser mesh for large press parts
+        # coarser mesh for large press parts; finer for first-stage cylinder faces
         defl = 0.8 if group.startswith("press") else 0.25
         if group.startswith("cell"):
+            defl = 0.08
+        if group == "first_stage":
             defl = 0.08
         export_stl(shape, stl_path, defl=defl)
 

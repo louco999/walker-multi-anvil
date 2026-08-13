@@ -45,59 +45,61 @@ def build_press_parts(module_r_outer: float = 80.0, module_h: float = 128.0):
     C_RED = (0.82, 0.05, 0.05)
     C_GAUGE = (0.55, 0.58, 0.60)
 
-    D = 2.0 * module_r_outer  # module outer diameter
+    D = 2.0 * module_r_outer  # module outer diameter (~160 mm for r≈80)
     Hm = module_h
 
-    # --- column layout (compact around module) ---
-    col_pitch_x = 1.72 * D
-    col_pitch_y = 1.58 * D
+    # --- column layout: taller/slimmer LP-style silhouette ---
+    # Old values (too squat / fat): pitch ~1.7D, col_r=0.26D, wide table
+    # Real LP-class: slender white columns, tighter around tool module
+    col_pitch_x = 1.38 * D
+    col_pitch_y = 1.28 * D
     hx, hy = col_pitch_x / 2.0, col_pitch_y / 2.0
-    col_r = 0.26 * D
+    col_r = 0.135 * D  # was 0.26D — columns were nearly fat poles
     col_xy = [(-hx, -hy), (hx, -hy), (-hx, hy), (hx, hy)]
 
-    table_t = 0.20 * D
+    table_t = 0.14 * D
     table_z = 0.0
-    pedestal_h = 1.20 * D
-    foot_h = 0.14 * D
+    pedestal_h = 0.78 * D  # was 1.20D — pedestal looked too chunky
+    foot_h = 0.10 * D
     # floor = bottom of foot under pedestal
     floor_z = table_z - table_t - pedestal_h - foot_h
 
     # lower platen on table
-    lower_h = 0.18 * D
-    lower_r = 0.68 * D
+    lower_h = 0.14 * D
+    lower_r = 0.58 * D
     module_bottom_z = table_z + lower_h
     module_top_z = module_bottom_z + Hm
     module_center_z = 0.5 * (module_bottom_z + module_top_z)
 
-    # ----- stack under head -----
-    u_in_r, u_in_h = 0.48 * D, 0.18 * D
-    u_ch_r, u_ch_h = 0.40 * D, 0.32 * D
-    u_pl_r, u_pl_h = 0.55 * D, 0.12 * D
+    # ----- stack under head (slightly taller daylight) -----
+    u_in_r, u_in_h = 0.42 * D, 0.16 * D
+    u_ch_r, u_ch_h = 0.36 * D, 0.36 * D
+    u_pl_r, u_pl_h = 0.48 * D, 0.11 * D
     z_u0 = module_top_z
     z_u1 = z_u0 + u_in_h
     z_u2 = z_u1 + u_ch_h
     z_tool_top = z_u2 + u_pl_h
 
-    # Orange ram — moderate, under head
-    ram_r = 0.48 * D
-    ram_h = 0.72 * D
-    ram_z0 = z_tool_top - 0.04 * D
+    # Orange ram — taller cylinder, smaller radius
+    ram_r = 0.38 * D
+    ram_h = 0.95 * D
+    ram_z0 = z_tool_top - 0.03 * D
     ram_top = ram_z0 + ram_h
 
     # ========== MULTI-LAYER TOP HEAD ==========
     # Photo: thick gray beam + lighter upper crown + front brand + 2 gauges
-    head_h = 0.38 * D  # main beam
-    head_overlap = 0.12 * D
+    head_h = 0.28 * D  # was 0.38D
+    head_overlap = 0.10 * D
     head_z0 = ram_top - head_overlap
     head_top = head_z0 + head_h
-    head_margin = 0.20 * D
+    head_margin = 0.14 * D
     head_dx = col_pitch_x + 2 * col_r + head_margin
     head_dy = col_pitch_y + 2 * col_r + head_margin
 
     # upper crown / instrument housing
-    crown_h = 0.28 * D
-    crown_dx = head_dx * 0.92
-    crown_dy = head_dy * 0.88
+    crown_h = 0.20 * D
+    crown_dx = head_dx * 0.90
+    crown_dy = head_dy * 0.86
     crown_z0 = head_top
     crown_top = crown_z0 + crown_h
 
@@ -106,30 +108,30 @@ def build_press_parts(module_r_outer: float = 80.0, module_h: float = 128.0):
     col_top = head_top + 0.02 * D
     col_h = col_top - col_z0
 
-    # Table footprint (compact around columns + cabinet clearance)
-    tbl_dx = col_pitch_x + 1.70 * D
-    tbl_dy = col_pitch_y + 1.05 * D
+    # Table footprint — tighter to columns (less "fat table")
+    tbl_dx = col_pitch_x + 1.05 * D
+    tbl_dy = col_pitch_y + 0.72 * D
 
     parts = []
 
     # ========== PEDESTAL / 机座 (LP photo: gray A-frame with pockets) ==========
     ped_z0 = table_z - table_t - pedestal_h
     ped = box(
-        -tbl_dx * 0.38,
-        -tbl_dy * 0.38,
+        -tbl_dx * 0.34,
+        -tbl_dy * 0.34,
         ped_z0,
-        tbl_dx * 0.76,
-        tbl_dy * 0.76,
+        tbl_dx * 0.68,
+        tbl_dy * 0.68,
         pedestal_h,
     )
     for sx in (-1.0, 1.0):
         for sy in (-1.0, 1.0):
             pocket = box(
-                sx * tbl_dx * 0.14 - 0.18 * D,
-                sy * tbl_dy * 0.14 - 0.16 * D,
-                ped_z0 + 0.12 * D,
-                0.36 * D,
-                0.32 * D,
+                sx * tbl_dx * 0.12 - 0.14 * D,
+                sy * tbl_dy * 0.12 - 0.13 * D,
+                ped_z0 + 0.10 * D,
+                0.28 * D,
+                0.26 * D,
                 pedestal_h * 0.72,
             )
             try:
@@ -138,11 +140,11 @@ def build_press_parts(module_r_outer: float = 80.0, module_h: float = 128.0):
                 pass
     parts.append(("Press_Pedestal", ped, C_BASE, "press_base", 0, (0, 0, 0)))
     foot = box(
-        -tbl_dx * 0.42,
-        -tbl_dy * 0.42,
+        -tbl_dx * 0.38,
+        -tbl_dy * 0.38,
         floor_z,
-        tbl_dx * 0.84,
-        tbl_dy * 0.84,
+        tbl_dx * 0.76,
+        tbl_dy * 0.76,
         foot_h,
     )
     parts.append(("Press_PedestalFoot", foot, C_BASE_DK, "press_base", 0, (0, 0, 0)))
@@ -344,12 +346,12 @@ def build_press_parts(module_r_outer: float = 80.0, module_h: float = 128.0):
 
     # ========== CONTROL CABINET — BESIDE press, RIGHT of table edge ==========
     # stands on floor next to pedestal (not on the table surface)
-    cab_w = 0.70 * D
-    cab_d = 0.95 * D
+    cab_w = 0.52 * D  # was 0.70D — cabinet looked oversized
+    cab_d = 0.72 * D
     cab_h = crown_top - floor_z  # full height from floor to machine top
     # fully outside right table edge
-    cab_x0 = tbl_dx / 2 + 0.08 * D
-    cab_y0 = -cab_d * 0.30
+    cab_x0 = tbl_dx / 2 + 0.06 * D
+    cab_y0 = -cab_d * 0.28
     cab = box(cab_x0, cab_y0, floor_z, cab_w, cab_d, cab_h)
     parts.append(("Press_Cabinet", cab, C_CAB, "press_cabinet", 0, (0, 0, 0)))
     # door face toward −X (toward press)

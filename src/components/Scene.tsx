@@ -1,11 +1,13 @@
-import { Suspense, useEffect, useRef } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Html } from '@react-three/drei';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import * as THREE from 'three';
-import { CadModel, CellModel, FullPressModel } from './CadModel';
-import { useWalkerStore } from '../store/useWalkerStore';
-import type { PartId } from '../types/parts';
+import { Suspense, useEffect, useRef } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { OrbitControls, Html, Preload } from '@react-three/drei'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
+import * as THREE from 'three'
+import { CadModel, CellModel, FullPressModel } from './CadModel'
+import { Studio } from './Studio'
+import { PostFX } from './PostFX'
+import { useWalkerStore } from '../store/useWalkerStore'
+import type { PartId } from '../types/parts'
 
 const FOCUS_OFFSETS: Partial<Record<PartId, THREE.Vector3>> = {
   'hydraulic-frame': new THREE.Vector3(0, 0.4, 0),
@@ -14,47 +16,51 @@ const FOCUS_OFFSETS: Partial<Record<PartId, THREE.Vector3>> = {
   'wc-anvils': new THREE.Vector3(0, 0, 0),
   'octahedron-cell': new THREE.Vector3(0, 0, 0),
   'sample-core': new THREE.Vector3(0, 0, 0),
-};
+}
 
 function SimulationTicker() {
-  const tick = useWalkerStore((s) => s.tickSimulation);
+  const tick = useWalkerStore((s) => s.tickSimulation)
   useFrame((_, dt) => {
-    tick(Math.min(dt, 0.05));
-  });
-  return null;
+    tick(Math.min(dt, 0.05))
+  })
+  return null
 }
 
 function FocusController() {
-  const focusPart = useWalkerStore((s) => s.focusPart);
-  const controls = useThree((s) => s.controls) as OrbitControlsImpl | null;
-  const target = useRef(new THREE.Vector3(0, 0, 0));
+  const focusPart = useWalkerStore((s) => s.focusPart)
+  const controls = useThree((s) => s.controls) as OrbitControlsImpl | null
+  const target = useRef(new THREE.Vector3(0, 0, 0))
 
   useEffect(() => {
-    if (!focusPart) return;
-    target.current.copy(FOCUS_OFFSETS[focusPart] ?? new THREE.Vector3(0, 0, 0));
-  }, [focusPart]);
+    if (!focusPart) return
+    target.current.copy(FOCUS_OFFSETS[focusPart] ?? new THREE.Vector3(0, 0, 0))
+  }, [focusPart])
 
   useFrame(() => {
-    if (!controls) return;
-    controls.target.lerp(target.current, 0.06);
-    controls.update();
-  });
+    if (!controls) return
+    controls.target.lerp(target.current, 0.06)
+    controls.update()
+  })
 
-  return null;
+  return null
 }
 
-function Lights({ mobile }: { mobile: boolean }) {
+/** Soft industrial lighting — full press needs less specular kick. */
+function Lights({ mobile, isFull }: { mobile: boolean; isFull: boolean }) {
+  const key = isFull ? 1.15 : 1.55
+  const fill = isFull ? 0.4 : 0.62
+  const front = isFull ? 0.32 : 0.5
+
   return (
     <>
-      <ambientLight intensity={0.48} color="#e8eef5" />
-      <hemisphereLight args={['#dce6f2', '#1c222c', 0.55]} />
+      <ambientLight intensity={isFull ? 0.58 : 0.48} color="#e4ebf4" />
+      <hemisphereLight args={['#e8eef8', '#1a2028', isFull ? 0.62 : 0.55]} />
       <directionalLight
-        position={[6, 10, 4]}
-        intensity={1.55}
+        position={isFull ? [5, 9, 5] : [6, 10, 4]}
+        intensity={key}
         color="#fff6ee"
         castShadow={!mobile}
-        shadow-mapSize-width={mobile ? 512 : 2048}
-        shadow-mapSize-height={mobile ? 512 : 2048}
+        shadow-mapSize={[mobile ? 512 : 1536, mobile ? 512 : 1536]}
         shadow-camera-far={30}
         shadow-camera-near={0.5}
         shadow-camera-left={-8}
@@ -64,78 +70,104 @@ function Lights({ mobile }: { mobile: boolean }) {
         shadow-bias={-0.00025}
         shadow-normalBias={0.035}
       />
-      {/* cool fill — separates white columns from gray head */}
-      <directionalLight position={[-6, 4, -3]} intensity={0.55} color="#9eb6d0" />
-      {/* front fill for orange ram / gauges */}
-      <directionalLight position={[1, 3, 7]} intensity={0.45} color="#ffe8d4" />
-      <directionalLight position={[0, -5, 2]} intensity={0.18} color="#6b7a8c" />
+      {/* Cool fill — softer for full press so white columns don't blow out */}
+      <directionalLight position={[-6, 4, -3]} intensity={fill} color="#9eb6d0" />
+      <directionalLight position={[1, 3, 7]} intensity={front} color="#ffe8d4" />
+      <directionalLight position={[0, -5, 2]} intensity={isFull ? 0.14 : 0.22} color="#6b7a8c" />
+      {/* Skip hard point light on full press — major glitter source on stainless */}
+      {!isFull && (
+        <pointLight position={[2, 2, 3]} intensity={0.3} color="#ffffff" distance={12} />
+      )}
     </>
-  );
+  )
 }
 
 function Loader() {
   return (
     <Html center>
-      <div className="canvas-loader">Building Walker module…</div>
+      <div className="canvas-loader">Loading Walker multi-anvil…</div>
     </Html>
-  );
+  )
 }
 
 export function Scene() {
-  const isMobile = useWalkerStore((s) => s.isMobile);
-  const viewMode = useWalkerStore((s) => s.viewMode);
-  const clearSelection = useWalkerStore((s) => s.setSelectedPart);
-  const isFull = viewMode === 'full';
-  const isCell = viewMode === 'cell';
+  const isMobile = useWalkerStore((s) => s.isMobile)
+  const viewMode = useWalkerStore((s) => s.viewMode)
+  const clearSelection = useWalkerStore((s) => s.setSelectedPart)
+  const isFull = viewMode === 'full'
+  const isCell = viewMode === 'cell'
 
   const cam = isFull
-    ? { position: [1.8, 1.1, 2.0] as [number, number, number], fogNear: 3, fogFar: 10, minD: 0.6, maxD: 6, targetY: 0.45 }
+    ? {
+        position: [2.0, 1.2, 2.15] as [number, number, number],
+        minD: 0.85,
+        maxD: 6.5,
+        targetY: 0.48,
+        fov: 30,
+      }
     : isCell
-      ? { position: [1.1, 0.7, 1.2] as [number, number, number], fogNear: 4, fogFar: 10, minD: 0.25, maxD: 4, targetY: 0 }
-      : { position: [2.6, 1.6, 2.8] as [number, number, number], fogNear: 8, fogFar: 18, minD: 0.8, maxD: 10, targetY: 0 };
+      ? {
+          position: [1.05, 0.65, 1.15] as [number, number, number],
+          minD: 0.3,
+          maxD: 3.5,
+          targetY: 0,
+          fov: 30,
+        }
+      : {
+          position: [2.5, 1.5, 2.7] as [number, number, number],
+          minD: 0.9,
+          maxD: 9,
+          targetY: 0,
+          fov: 34,
+        }
 
   return (
     <Canvas
       className="walker-canvas"
       shadows={!isMobile}
-      dpr={isMobile ? [1, 1.25] : [1, 2]}
+      dpr={isMobile ? [1, 1.25] : [1, 1.6]}
       camera={{
         position: cam.position,
-        fov: 34,
+        fov: cam.fov,
         near: 0.05,
         far: 80,
       }}
       gl={{
-        antialias: !isMobile,
+        antialias: true,
         powerPreference: isMobile ? 'low-power' : 'high-performance',
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.12,
+        // Full press: lower exposure so white columns / SS stay matte
+        toneMappingExposure: isFull ? 0.95 : 1.1,
         localClippingEnabled: true,
         outputColorSpace: THREE.SRGBColorSpace,
-        // better depth precision for coplanar WC cube faces when orbiting cutaway
         logarithmicDepthBuffer: true,
+      }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(new THREE.Color('#0c1018'))
       }}
       onPointerMissed={() => clearSelection(null)}
     >
-      <color attach="background" args={['#1a1e24']} />
-      <fog attach="fog" args={['#1a1e24', cam.fogNear, cam.fogFar]} />
-
       <Suspense fallback={<Loader />}>
-        <Lights mobile={isMobile} />
+        <Studio mobile={isMobile} viewMode={viewMode} />
+        <Lights mobile={isMobile} isFull={isFull} />
         {isFull ? <FullPressModel /> : isCell ? <CellModel /> : <CadModel />}
         <SimulationTicker />
         <FocusController />
+        <PostFX mobile={isMobile} isFull={isFull} />
+        <Preload all />
       </Suspense>
 
       <OrbitControls
         makeDefault
         enableDamping
-        dampingFactor={0.08}
+        dampingFactor={0.07}
         minDistance={cam.minD}
         maxDistance={cam.maxD}
         target={[0, cam.targetY, 0]}
         maxPolarAngle={Math.PI * 0.92}
+        autoRotate
+        autoRotateSpeed={isFull ? 0.2 : 0.28}
       />
     </Canvas>
-  );
+  )
 }

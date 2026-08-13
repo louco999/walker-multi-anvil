@@ -161,20 +161,32 @@ def make_octahedron(mid_r: float) -> Part.Shape:
     return solid
 
 
-def cut_halfspace_keep_positive(shape: Part.Shape, normal: Vector, offset: float) -> Part.Shape:
+def keep_halfspace(shape: Part.Shape, normal: Vector, constant: float, box_L: float = 400.0) -> Part.Shape:
+    """
+    Keep region where normal · point >= constant.
+
+    Removes a large box covering the complementary half-space. Box local +Z
+    aligns with `normal` so diagonal bisectors work (not only axis-aligned).
+    """
     n = Vector(normal)
     if n.Length < 1e-12:
         return shape
     n.normalize()
-    # Keep cutter only moderately larger than the module — huge boxes leave sliver BBs
-    L = 280.0
-    center = n * (offset - L / 2.0)
+    L = box_L
+    # Box spans [constant - L, constant] along n → cutting it keeps n·x ≳ constant
+    center = n * (constant - L / 2.0)
     box = Part.makeBox(L, L, L, Vector(-L / 2, -L / 2, -L / 2))
     box.Placement = Base.Placement(center, Rotation(Vector(0, 0, 1), n))
     box = box.transformGeometry(box.Placement.toMatrix())
     box.Placement = Base.Placement()
     try:
-        return shape.cut(box)
+        out = shape.cut(box)
+        sols = [s for s in out.Solids if s.Volume > 1.0]
+        if not sols:
+            return shape
+        if len(sols) == 1:
+            return sols[0]
+        return max(sols, key=lambda s: s.Volume)
     except Exception:
         return shape
 
@@ -183,20 +195,98 @@ def make_press_cylinder(r: float, h: float) -> Part.Shape:
     return Part.makeCylinder(r, h, Vector(0, 0, -h / 2), Vector(0, 0, 1))
 
 
+def _face_voronoi_planes_cube(n_c: Vector, kerf: float, pad_offset: float):
+    """
+    Cube-frame half-spaces for one first-stage anvil.
+
+    Face Voronoi of a cube: the +X sector is { x >= |y|, x >= |z| }.
+    With kerf κ along each shared bisector plane, that becomes
+      x >= |y| + κ,  x >= |z| + κ
+    (κ = kerf/√2 so the gap measured normal to the bisector is `kerf`).
+
+    Also keep outside the package face: n·r >= pad_offset.
+    """
+    κ = kerf / math.sqrt(2.0)
+    ax = abs(n_c.x) > 0.5
+    ay = abs(n_c.y) > 0.5
+    az = abs(n_c.z) > 0.5
+    planes = []  # list of (normal_cube, constant)
+    if ax:
+        s = 1.0 if n_c.x > 0 else -1.0
+        planes = [
+            (Vector(s, -1, 0), κ),
+            (Vector(s, 1, 0), κ),
+            (Vector(s, 0, -1), κ),
+            (Vector(s, 0, 1), κ),
+            (Vector(s, 0, 0), pad_offset),
+        ]
+    elif ay:
+        s = 1.0 if n_c.y > 0 else -1.0
+        planes = [
+            (Vector(-1, s, 0), κ),
+            (Vector(1, s, 0), κ),
+            (Vector(0, s, -1), κ),
+            (Vector(0, s, 1), κ),
+            (Vector(0, s, 0), pad_offset),
+        ]
+    elif az:
+        s = 1.0 if n_c.z > 0 else -1.0
+        planes = [
+            (Vector(-1, 0, s), κ),
+            (Vector(1, 0, s), κ),
+            (Vector(0, -1, s), κ),
+            (Vector(0, 1, s), κ),
+            (Vector(0, 0, s), pad_offset),
+        ]
+    return planes
+
+
 def make_first_stage_set(D: dict):
     """
-    6 first-stage anvils: package-face prism ∩ hatbox cylinder.
+    6 first-stage steel anvils (3 upper + 3 lower) that **tile the hatbox bore**.
 
-    Uses prism∩cylinder only (no half-space boolean). Half-space cuts left
-    degenerate vertices hundreds of mm away and made the web assembly look
-    like the module was floating.
+    Real Walker geometry:
+      - Outer face = true cylinder about press +Z (fills module ID wall)
+      - Inner pad = coplanar with one face of the Kawai cube package
+      - Side faces = cube-face Voronoi bisectors → anvils nest 严丝合缝
+        with only a thin kerf between neighbors
+
+    Construction:  cylinder  −  package_cube,  then partition by 6 Voronoi sectors.
+    (Old square-prism ∩ cylinder left large empty lobes between anvils.)
     """
     a = D["a"]
     r_inner = D["r_inner"]
-    h = D["hatbox_h"] * 0.90
+    # Nearly full module height so the bore wall reads as solid steel
+    h = D["hatbox_h"] * 0.96
     kerf = D["first_stage_kerf"]
     rot = kawai_rotation()
-    master = make_press_cylinder(r_inner, h)
+
+    # Tiny pad clearance so anvil does not boolean-intersect WC faces
+    pad_clear = max(0.12, kerf * 0.5)
+    pad_offset = a + pad_clear
+
+    cylinder = make_press_cylinder(r_inner, h)
+    # Package envelope (WC 2a cube) — slightly oversized for pad clearance
+    package = Part.makeBox(
+        2 * pad_offset, 2 * pad_offset, 2 * pad_offset,
+        Vector(-pad_offset, -pad_offset, -pad_offset),
+    )
+    package = transform_by_rotation(package, rot)
+
+    try:
+        fill = cylinder.cut(package)
+    except Exception as ex:
+        print(f"  warn: cylinder.cut(package) failed: {ex}")
+        fill = cylinder
+
+    # Cap height hard (safety)
+    zcap = Part.makeBox(
+        r_inner * 4, r_inner * 4, h, Vector(-r_inner * 2, -r_inner * 2, -h / 2)
+    )
+    try:
+        fill = fill.common(zcap)
+    except Exception:
+        pass
 
     faces_c = {
         "pX": Vector(1, 0, 0),
@@ -207,42 +297,46 @@ def make_first_stage_set(D: dict):
         "mZ": Vector(0, 0, -1),
     }
     results = []
-    # Prism extends from package face outward past cylinder
-    depth = r_inner + a + 5.0
-    pad = a - kerf * 0.5
+    vol_sum = 0.0
 
     for name, n_c in faces_c.items():
-        if abs(n_c.x) > 0.5:
-            sign = 1 if n_c.x > 0 else -1
-            x0 = a if sign > 0 else -a - depth
-            box = Part.makeBox(depth, 2 * pad, 2 * pad, Vector(x0, -pad, -pad))
-        elif abs(n_c.y) > 0.5:
-            sign = 1 if n_c.y > 0 else -1
-            y0 = a if sign > 0 else -a - depth
-            box = Part.makeBox(2 * pad, depth, 2 * pad, Vector(-pad, y0, -pad))
-        else:
-            sign = 1 if n_c.z > 0 else -1
-            z0 = a if sign > 0 else -a - depth
-            box = Part.makeBox(2 * pad, 2 * pad, depth, Vector(-pad, -pad, z0))
+        piece = fill.copy()
+        for n_cube, const in _face_voronoi_planes_cube(n_c, kerf, pad_offset):
+            # Pure rotation: (R n)·r_w = n·r_c = const
+            n_w = rot.multVec(n_cube)
+            piece = keep_halfspace(piece, n_w, const, box_L=max(500.0, r_inner * 8))
 
-        box = transform_by_rotation(box, rot)
-        piece = master.common(box)
-        # Force inside hatbox height (rotated prisms otherwise stick out ±100mm)
-        zcap = Part.makeBox(
-            r_inner * 4, r_inner * 4, h, Vector(-r_inner * 2, -r_inner * 2, -h / 2)
+        sols = sorted(
+            [s for s in piece.Solids if s.Volume > 10.0],
+            key=lambda s: s.Volume,
+            reverse=True,
         )
-        try:
-            piece = piece.common(zcap)
-        except Exception:
-            pass
-        sols = sorted(piece.Solids, key=lambda s: s.Volume, reverse=True)
-        if not sols or sols[0].Volume < 10:
+        if not sols:
             print(f"  warn: empty first-stage {name}")
             continue
         piece = sols[0]
+        try:
+            piece = piece.removeSplitter()
+        except Exception:
+            pass
         n = rot.multVec(n_c)
         n.normalize()
+        vol_sum += piece.Volume
         results.append((f"FirstStage_{name}", piece, (n.x, n.y, n.z)))
+
+    # Diagnostics: six wedges should nearly fill cylinder − package
+    try:
+        fill_vol = sum(s.Volume for s in fill.Solids) if fill.Solids else fill.Volume
+        print(
+            f"  first-stage fill check: 6×sum={vol_sum:.1f}  "
+            f"cylinder−package≈{fill_vol:.1f} mm³  "
+            f"(kerf gap ~{fill_vol - vol_sum:.1f})"
+        )
+    except Exception:
+        pass
+
+    if len(results) != 6:
+        print(f"  warn: expected 6 first-stage anvils, got {len(results)}")
     return results
 
 
@@ -324,13 +418,13 @@ def safe_color(obj, rgb):
         pass
 
 
-def export_part_stl(shape: Part.Shape, path: str, linear_deflection=0.35):
+def export_part_stl(shape: Part.Shape, path: str, linear_deflection=0.35, angular_deflection=0.5):
     """Mesh a shape and write binary STL."""
     try:
         mesh = MeshPart.meshFromShape(
             Shape=shape,
             LinearDeflection=linear_deflection,
-            AngularDeflection=0.5,
+            AngularDeflection=angular_deflection,
             Relative=False,
         )
         mesh.write(path)
@@ -396,7 +490,14 @@ def build(export_dir: str | None = None) -> dict:
             shape.exportStep(step_path)
         except Exception as ex:
             print(f"  STEP fail {name}: {ex}")
-        export_part_stl(shape, stl_path)
+        # First-stage outer face is a true cylinder — finer mesh so the
+        # hatbox bore wall reads smooth and fully filled in the web view.
+        if group == "first_stage":
+            export_part_stl(shape, stl_path, linear_deflection=0.08, angular_deflection=0.12)
+        elif group == "hatbox":
+            export_part_stl(shape, stl_path, linear_deflection=0.28, angular_deflection=0.35)
+        else:
+            export_part_stl(shape, stl_path)
         manifest["parts"].append(
             {
                 "id": name,

@@ -119,11 +119,34 @@ export function Dashboard() {
             </p>
           </div>
         </div>
-        <div className={`phase-pill ${phaseClass(phaseState)}`}>
-          <span className="phase-dot" />
-          {phaseState === 'Stable' && 'Stable'}
-          {phaseState === 'Transitioning' && 'Transitioning…'}
-          {phaseState === 'Diamond' && 'Diamond risk'}
+        <div className="header-right">
+          <nav className="cross-nav" aria-label="Lab apps">
+            <a
+              className="nav-chip"
+              href={import.meta.env.VITE_DAC_URL ?? 'http://127.0.0.1:5174/'}
+              target="_blank"
+              rel="noreferrer"
+            >
+              DAC
+            </a>
+            <a className="nav-chip active" href="/">
+              Walker
+            </a>
+            <a
+              className="nav-chip"
+              href={import.meta.env.VITE_HUB_URL ?? 'http://127.0.0.1:5180/'}
+              target="_blank"
+              rel="noreferrer"
+            >
+              对照站
+            </a>
+          </nav>
+          <div className={`phase-pill ${phaseClass(phaseState)}`}>
+            <span className="phase-dot" />
+            {phaseState === 'Stable' && 'Stable'}
+            {phaseState === 'Transitioning' && 'Transitioning…'}
+            {phaseState === 'Diamond' && 'Diamond risk'}
+          </div>
         </div>
       </header>
 
